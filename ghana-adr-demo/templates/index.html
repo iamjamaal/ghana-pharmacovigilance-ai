@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ghana ADR Detection System | Clinical Surveillance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+
+  /* Entity highlighting — color + text prefix for color-blind safety */
+  .entity-drug     { background-color:#fef3c7; border-bottom:2px solid #d97706; padding:1px 3px; border-radius:2px; }
+  .entity-drug::before     { content:"Rx\00a0"; font-size:0.65em; font-weight:700; vertical-align:super; color:#92400e; letter-spacing:0; }
+  .entity-adr      { background-color:#fee2e2; border-bottom:2px solid #dc2626; padding:1px 3px; border-radius:2px; }
+  .entity-adr::before      { content:"!\00a0"; font-size:0.8em; font-weight:700; vertical-align:super; color:#991b1b; }
+  .entity-severity { background-color:#ffedd5; border-bottom:2px solid #ea580c; padding:1px 3px; border-radius:2px; }
+  .entity-severity::before { content:"\2605\00a0"; font-size:0.75em; vertical-align:super; color:#9a3412; }
+  .entity-patient  { background-color:#ede9fe; border-bottom:2px solid #7c3aed; padding:1px 3px; border-radius:2px; }
+  .entity-patient::before  { content:"P\00a0"; font-size:0.65em; font-weight:700; vertical-align:super; color:#4c1d95; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar       { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:#f0f2f0; }
+  ::-webkit-scrollbar-thumb { background:#c4cbc4; border-radius:10px; }
+  ::-webkit-scrollbar-thumb:hover { background:#8f9e8f; }
+
+  /* Panel visibility */
+  .content-panel        { display:block; }
+  .content-panel.hidden { display:none !important; }
+  .sidebar-force-hide   { display:none !important; }
+
+  /* Top nav */
+  .tnav-active   { color:#00502e; font-weight:700; border-bottom-color:#00502e; }
+  .tnav-inactive { color:#465645; font-weight:500; border-bottom-color:transparent; }
+  .tnav-inactive:hover { color:#00502e; }
+
+  /* Sidebar nav */
+  .snav-active   { background:#00502e; color:#ffffff; font-weight:600; }
+  .snav-inactive { color:#465645; }
+  .snav-inactive:hover { background:#e8ebe8; color:#00502e; }
+
+  /* Animations */
+  @keyframes fadeIn  { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+  @keyframes slideIn { from { opacity:0; transform:translateX(14px); } to { opacity:1; transform:none; } }
+  .fade-in { animation:fadeIn 0.2s ease; }
+  .toast   { animation:slideIn 0.2s ease; }
+
+  /* Confidence bar — scaleX avoids layout thrash */
+  .conf-bar-fill { transform-origin:left center; transform:scaleX(0); transition:transform 0.55s cubic-bezier(0.25,0,0,1); }
+
+  /* Drag-over */
+  .drag-over { border-color:#00502e !important; background:#f0f7f3 !important; }
+
+  /* Focus visible */
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
+    outline:2px solid #00502e; outline-offset:2px;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in, .toast { animation:none; }
+    .conf-bar-fill   { transition:none; }
+    * { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+</style>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode:"class",
+  theme: { extend: {
+    colors: {
+      "background":                "#f4f6f4",
+      "surface":                   "#ffffff",
+      "surface-container-low":     "#eef1ee",
+      "surface-container":         "#e6ebe6",
+      "surface-container-high":    "#dde3dd",
+      "surface-container-highest": "#d0d8d0",
+      "surface-variant":           "#c4cdc4",
+      "surface-bright":            "#f4f6f4",
+      "surface-dim":               "#cdd4cd",
+      "on-background":             "#0b1a0b",
+      "on-surface":                "#0b1a0b",
+      "on-surface-variant":        "#445844",
+      "outline":                   "#5c6e5c",
+      "outline-variant":           "#c2ccc2",
+      "primary":                   "#00502e",
+      "primary-container":         "#00612e",
+      "primary-fixed":             "#c4f0d4",
+      "primary-fixed-dim":         "#7fd9a0",
+      "on-primary":                "#ffffff",
+      "on-primary-fixed":          "#001e0e",
+      "on-primary-fixed-variant":  "#003a1e",
+      "on-primary-container":      "#c4f0d4",
+      "inverse-primary":           "#7fd9a0",
+      "secondary":                 "#b91c1c",
+      "secondary-container":       "#dc2626",
+      "secondary-fixed":           "#fee2e2",
+      "secondary-fixed-dim":       "#fca5a5",
+      "on-secondary":              "#ffffff",
+      "on-secondary-container":    "#ffffff",
+      "on-secondary-fixed":        "#7f1d1d",
+      "on-secondary-fixed-variant":"#991b1b",
+      "tertiary":                  "#475569",
+      "tertiary-container":        "#64748b",
+      "tertiary-fixed":            "#e2e8f0",
+      "tertiary-fixed-dim":        "#cbd5e1",
+      "on-tertiary":               "#ffffff",
+      "on-tertiary-container":     "#f1f5f9",
+      "on-tertiary-fixed":         "#0f172a",
+      "on-tertiary-fixed-variant": "#334155",
+      "error":                     "#b91c1c",
+      "error-container":           "#fee2e2",
+      "on-error":                  "#ffffff",
+      "on-error-container":        "#7f1d1d",
+      "inverse-surface":           "#1a2e1a",
+      "inverse-on-surface":        "#eef2ee",
+      "surface-tint":              "#00502e",
+      "surface-container-lowest":  "#ffffff",
+    },
+    borderRadius: {
+      DEFAULT:"0.125rem", lg:"0.25rem", xl:"0.375rem", "2xl":"0.5rem", full:"9999px",
+    },
+    spacing: {
+      xs:"4px", sm:"8px", md:"16px", lg:"24px", xl:"32px", "2xl":"48px",
+      gutter:"20px", base:"4px", "container-max":"1280px",
+    },
+    fontFamily: {
+      sans:         ["Inter","system-ui","sans-serif"],
+      mono:         ["JetBrains Mono","monospace"],
+      "display-lg": ["Inter","system-ui"],
+      "headline-md":["Inter","system-ui"],
+      "title-sm":   ["Inter","system-ui"],
+      "body-md":    ["Inter","system-ui"],
+      "body-sm":    ["Inter","system-ui"],
+      "label-caps": ["Inter","system-ui"],
+      "mono-data":  ["JetBrains Mono","monospace"],
+    },
+    fontSize: {
+      "display-lg": ["30px",{lineHeight:"38px", letterSpacing:"-0.02em", fontWeight:"700"}],
+      "headline-md":["21px",{lineHeight:"29px", letterSpacing:"-0.01em", fontWeight:"600"}],
+      "title-sm":   ["16px",{lineHeight:"24px", fontWeight:"600"}],
+      "body-md":    ["15px",{lineHeight:"24px", fontWeight:"400"}],
+      "body-sm":    ["13px",{lineHeight:"20px", fontWeight:"400"}],
+      "label-caps": ["11px",{lineHeight:"16px", letterSpacing:"0.07em", fontWeight:"600"}],
+      "mono-data":  ["13px",{lineHeight:"18px", fontWeight:"400"}],
+    },
+  }}
+}
+</script>
+</head>
+<body class="bg-background text-on-background font-sans text-body-md min-h-screen flex flex-col">
+
+<!-- ═══ TOP NAV ═══════════════════════════════════════════════════════════════ -->
+<header class="bg-surface border-b border-outline-variant sticky top-0 z-50" style="border-top:3px solid #00502e;">
+<div class="flex items-center justify-between h-14 px-lg max-w-[1280px] mx-auto w-full">
+
+  <!-- Logo + title -->
+  <div class="flex items-center gap-md">
+    <div class="flex flex-col w-9 h-6 overflow-hidden rounded-sm border border-outline-variant flex-shrink-0" aria-hidden="true">
+      <div class="flex-1 bg-[#CE1126]"></div>
+      <div class="flex-1 bg-[#FCD116] flex items-center justify-center">
+        <div class="w-2 h-2 bg-black" style="clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"></div>
+      </div>
+      <div class="flex-1 bg-[#006B3F]"></div>
+    </div>
+    <div>
+      <h1 class="text-title-sm font-semibold text-on-background leading-tight">Ghana ADR Detection System</h1>
+    </div>
+    <div class="hidden lg:flex items-center gap-xs ml-sm">
+      {% if model_loaded %}
+      <span class="px-sm py-xs text-[10px] font-semibold border border-outline-variant text-on-surface-variant rounded font-mono">{{ backbone }}</span>
+      {% else %}
+      <span class="px-sm py-xs text-[10px] font-semibold border border-yellow-300 bg-yellow-50 text-yellow-800 rounded">&#9888; Demo Mode</span>
+      {% endif %}
+      <span class="px-sm py-xs text-[10px] font-semibold border border-outline-variant text-on-surface-variant rounded">16 Ghanaian Sources</span>
+      <span class="px-sm py-xs text-[10px] font-semibold bg-primary text-on-primary rounded">Beta v0.9</span>
+    </div>
+  </div>
+
+  <!-- Top navigation -->
+  <nav class="hidden md:flex items-center gap-lg" aria-label="Main navigation">
+    <button id="tnav-dashboard" class="tnav-active text-label-caps font-label-caps h-14 border-b-2 transition-colors" onclick="showContent('single')">Dashboard</button>
+    <button id="tnav-alerts" class="tnav-inactive text-label-caps font-label-caps h-14 border-b-2 relative transition-colors" onclick="showContent('alerts')">
+      Alerts<span class="absolute -top-0.5 -right-3 bg-secondary text-on-secondary text-[8px] font-bold px-[5px] py-px rounded-full">3</span>
+    </button>
+    <button id="tnav-protocols" class="tnav-inactive text-label-caps font-label-caps h-14 border-b-2 transition-colors" onclick="showContent('protocols')">Protocols</button>
+    <button id="tnav-archive" class="tnav-inactive text-label-caps font-label-caps h-14 border-b-2 transition-colors" onclick="showContent('archive')">Archive</button>
+  </nav>
+
+  <!-- User actions -->
+  <div class="flex items-center gap-xs">
+    <button class="material-symbols-outlined text-[22px] text-on-surface-variant hover:text-primary p-sm rounded hover:bg-surface-container transition-colors" onclick="showContent('alerts')" aria-label="Alerts">notifications</button>
+    <button class="material-symbols-outlined text-[22px] text-on-surface-variant hover:text-primary p-sm rounded hover:bg-surface-container transition-colors" onclick="showContent('protocols')" aria-label="Settings">settings</button>
+    <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary text-[11px] font-bold select-none ml-xs" aria-label="User">NN</div>
+  </div>
+
+</div>
+</header>
+
+<!-- ═══ APP BODY ══════════════════════════════════════════════════════════════ -->
+<div class="flex flex-1 max-w-[1280px] mx-auto w-full">
+
+<!-- ── SIDEBAR ────────────────────────────────────────────────────────────── -->
+<aside id="sidebar" class="w-64 bg-surface-container-low border-r border-outline-variant flex-col hidden lg:flex flex-shrink-0">
+
+  <div class="px-md pt-lg pb-md border-b border-outline-variant">
+    <h2 class="text-title-sm font-semibold text-on-background">Clinical Surveillance</h2>
+    <p class="text-body-sm text-on-surface-variant mt-xs">Vigilance Engine v0.9</p>
+  </div>
+
+  <nav class="px-sm pt-md pb-sm space-y-xs" aria-label="Panel navigation">
+    <button data-nav="single"   onclick="showContent('single')"   class="sidebar-item snav-active   w-full flex items-center gap-sm px-md py-[9px] rounded text-left text-body-sm transition-colors">
+      <span class="material-symbols-outlined text-[20px]">analytics</span>Single Analysis
+    </button>
+    <button data-nav="batch"    onclick="showContent('batch')"    class="sidebar-item snav-inactive w-full flex items-center gap-sm px-md py-[9px] rounded text-left text-body-sm transition-colors">
+      <span class="material-symbols-outlined text-[20px]">upload_file</span>Batch Analysis
+    </button>
+    <button data-nav="insights" onclick="showContent('insights')" class="sidebar-item snav-inactive w-full flex items-center gap-sm px-md py-[9px] rounded text-left text-body-sm transition-colors">
+      <span class="material-symbols-outlined text-[20px]">query_stats</span>Model Insights
+    </button>
+    <button data-nav="datasets" onclick="showContent('datasets')" class="sidebar-item snav-inactive w-full flex items-center gap-sm px-md py-[9px] rounded text-left text-body-sm transition-colors">
+      <span class="material-symbols-outlined text-[20px]">database</span>Ghanaian Datasets
+    </button>
+  </nav>
+
+  <div class="px-md pt-md pb-sm border-t border-outline-variant mt-sm">
+    <p class="text-label-caps font-label-caps text-on-surface-variant mb-sm">EXAMPLE CASES</p>
+    <div class="space-y-xs">
+      <button onclick="loadExample('coartem')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
+        <span class="font-semibold text-primary">Coartem</span><span class="text-on-surface-variant"> → Oculogyric crisis</span>
+      </button>
+      <button onclick="loadExample('amoxicillin')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
+        <span class="font-semibold text-primary">Amoxicillin</span><span class="text-on-surface-variant"> → Severe rash</span>
+      </button>
+      <button onclick="loadExample('zidovudine')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
+        <span class="font-semibold text-primary">Zidovudine</span><span class="text-on-surface-variant"> → Anaemia</span>
+      </button>
+      <button onclick="loadExample('negative')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
+        <span class="text-on-surface-variant">Non-ADR control</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-auto px-md py-md border-t border-outline-variant">
+    <div class="flex justify-between text-body-sm mb-md px-xs">
+      <span class="text-on-surface-variant">Classifier F1</span><span class="font-semibold font-mono text-primary">0.784</span>
+    </div>
+    <div class="flex justify-between text-body-sm mb-md px-xs">
+      <span class="text-on-surface-variant">NER F1</span><span class="font-semibold font-mono text-primary">0.746</span>
+    </div>
+    <button onclick="openModal()" class="w-full py-sm bg-secondary text-on-secondary font-semibold rounded flex items-center justify-center gap-xs text-body-sm hover:bg-secondary-container transition-colors">
+      <span class="material-symbols-outlined text-[18px]">report</span>Report ADR
+    </button>
+  </div>
+
+</aside>
+
+<!-- ── MAIN CONTENT ───────────────────────────────────────────────────────── -->
+<main class="flex-1 bg-background overflow-y-auto min-w-0">
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PANEL 1 — SINGLE ANALYSIS
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="content-single" class="content-panel p-lg fade-in">
+
+  <!-- Panel tabs -->
+  <div class="flex gap-lg border-b border-outline-variant mb-lg">
+    <button class="pb-sm border-b-2 border-primary text-primary font-semibold text-body-sm -mb-px">Single Analysis</button>
+    <button onclick="showContent('batch')" class="pb-sm border-b-2 border-transparent text-on-surface-variant hover:text-primary text-body-sm -mb-px transition-colors">Batch Analysis</button>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-lg">
+
+    <!-- Input + Results column -->
+    <div class="xl:col-span-2 space-y-lg">
+
+      <!-- Input -->
+      <section class="bg-surface border border-outline-variant rounded-xl p-lg" aria-labelledby="input-heading">
+        <div class="flex items-start justify-between mb-md">
+          <div>
+            <h2 id="input-heading" class="text-title-sm font-semibold text-on-background">Clinical Narrative Input</h2>
+            <p class="text-body-sm text-on-surface-variant mt-xs">Patient notes, pharmacovigilance reports, or any clinical text</p>
+          </div>
+          <button onclick="clearAnalysis()" class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-medium flex-shrink-0 ml-md">Clear All</button>
+        </div>
+        <textarea id="clinical-input"
+          class="w-full h-44 px-md py-sm bg-surface-container-low border border-outline-variant rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-sans text-body-md text-on-surface resize-none"
+          placeholder="e.g. Patient presented with severe rash 48 hours after starting Amoxicillin for an upper respiratory tract infection…"
+          oninput="updateCharCount()"></textarea>
+        <div class="flex items-center justify-between mt-sm">
+          <span id="char-count" class="text-body-sm text-on-surface-variant">0 characters · 0 words</span>
+          <button id="run-btn" onclick="runAnalysis()"
+            class="px-xl py-sm bg-primary text-on-primary font-semibold rounded text-body-sm hover:bg-primary-container transition-colors active:scale-95 shadow-sm">
+            Run Analysis Engine
+          </button>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="results-section" class="bg-surface border border-outline-variant rounded-xl overflow-hidden hidden" aria-labelledby="result-heading">
+        <!-- Classification banner -->
+        <div id="result-banner" class="px-lg py-md flex items-center justify-between">
+          <div class="flex items-center gap-md">
+            <span id="result-icon" class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">warning</span>
+            <div>
+              <h3 id="result-label" class="font-semibold text-title-sm"></h3>
+              <p id="result-sub" class="text-body-sm opacity-85 mt-xs"></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-sm flex-shrink-0">
+            <div id="severity-badge" class="px-md py-xs bg-white/20 rounded text-label-caps font-semibold"></div>
+            <button onclick="exportJSON()" class="px-sm py-xs bg-white/20 rounded text-[11px] font-semibold flex items-center gap-xs hover:bg-white/30 transition-colors">
+              <span class="material-symbols-outlined text-[16px]">download</span>JSON
+            </button>
+          </div>
+        </div>
+
+        <!-- Annotated text -->
+        <div class="px-lg py-md border-t border-black/10">
+          <div class="flex items-center justify-between mb-sm">
+            <p class="text-label-caps font-label-caps text-on-surface-variant">ANNOTATED NARRATIVE</p>
+            <div id="flag-pills" class="flex gap-xs"></div>
+          </div>
+          <div id="annotated-text" class="bg-surface-container-low border border-outline-variant rounded px-md py-sm text-body-md text-on-surface min-h-[60px]" style="line-height:2.4;"></div>
+
+          <!-- Entity legend — icon prefix + color swatch -->
+          <div class="flex flex-wrap gap-md mt-md pt-sm border-t border-outline-variant">
+            <span class="flex items-center gap-xs text-body-sm text-on-surface-variant"><span class="entity-drug px-xs rounded text-[11px]">Rx Drug</span></span>
+            <span class="flex items-center gap-xs text-body-sm text-on-surface-variant"><span class="entity-adr px-xs rounded text-[11px]">! ADR</span></span>
+            <span class="flex items-center gap-xs text-body-sm text-on-surface-variant"><span class="entity-severity px-xs rounded text-[11px]">&#9733; Severity</span></span>
+            <span class="flex items-center gap-xs text-body-sm text-on-surface-variant"><span class="entity-patient px-xs rounded text-[11px]">P Patient</span></span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right panel -->
+    <div class="space-y-lg">
+
+      <!-- Confidence -->
+      <section class="bg-surface border border-outline-variant rounded-xl p-lg" aria-labelledby="conf-heading">
+        <h3 id="conf-heading" class="text-title-sm font-semibold text-on-background mb-lg">Confidence Scores</h3>
+        <div class="space-y-lg">
+          <div>
+            <div class="flex justify-between items-center mb-xs">
+              <span class="text-label-caps font-label-caps text-on-surface-variant">ADR DETECTED</span>
+              <span id="conf-adr" class="text-body-md font-semibold font-mono text-secondary">—</span>
+            </div>
+            <div class="w-full bg-surface-container-high rounded-full h-2 overflow-hidden">
+              <div id="bar-adr" class="bg-secondary h-full rounded-full conf-bar-fill w-full"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-xs">
+              <span class="text-label-caps font-label-caps text-on-surface-variant">NO ADR / NORMAL</span>
+              <span id="conf-no-adr" class="text-body-md font-semibold font-mono text-on-surface-variant">—</span>
+            </div>
+            <div class="w-full bg-surface-container-high rounded-full h-2 overflow-hidden">
+              <div id="bar-no-adr" class="bg-primary h-full rounded-full conf-bar-fill w-full"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Entity table -->
+      <section class="bg-surface border border-outline-variant rounded-xl overflow-hidden" aria-labelledby="entity-heading">
+        <div class="px-md py-sm border-b border-outline-variant bg-surface-container-low">
+          <h3 id="entity-heading" class="text-label-caps font-label-caps text-on-surface-variant">EXTRACTED ENTITIES</h3>
+        </div>
+        <table class="w-full text-left text-body-sm">
+          <thead>
+            <tr class="bg-surface border-b border-outline-variant">
+              <th class="px-md py-sm font-semibold text-on-background">Entity</th>
+              <th class="px-md py-sm font-semibold text-on-background">Type</th>
+              <th class="px-md py-sm font-semibold text-on-background text-right">Conf.</th>
+            </tr>
+          </thead>
+          <tbody id="entity-table-body" class="divide-y divide-outline-variant">
+            <tr><td colspan="3" class="px-md py-lg text-body-sm text-on-surface-variant text-center">Run analysis to see entities</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Medical review -->
+      <section class="bg-surface border border-outline-variant rounded-xl p-lg" aria-labelledby="review-heading">
+        <div class="flex items-start gap-sm mb-md">
+          <span class="material-symbols-outlined text-primary text-[22px] mt-0.5 flex-shrink-0" style="font-variation-settings:'FILL' 1">shield</span>
+          <div>
+            <h4 id="review-heading" class="font-semibold text-on-background text-body-md">Medical Review Required</h4>
+            <p class="text-body-sm text-on-surface-variant mt-xs">AI output must be verified by a qualified clinician before finalising any pharmacovigilance report.</p>
+          </div>
+        </div>
+        <button id="verify-btn" onclick="markVerified()"
+          class="w-full py-sm border border-primary text-primary font-semibold rounded text-body-sm hover:bg-primary hover:text-on-primary transition-colors">
+          Mark as Clinically Verified
+        </button>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PANEL 2 — BATCH ANALYSIS
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="content-batch" class="content-panel hidden p-lg fade-in">
+  <div class="mb-lg pb-lg border-b border-outline-variant">
+    <h2 class="text-headline-md font-semibold text-on-background">Batch Analysis</h2>
+    <p class="text-body-sm text-on-surface-variant mt-xs">Process multiple clinical texts from a .txt or .csv file</p>
+  </div>
+  <div class="grid grid-cols-1 xl:grid-cols-5 gap-lg">
+
+    <!-- Upload -->
+    <div class="xl:col-span-2 space-y-lg">
+      <section class="bg-surface border border-outline-variant rounded-xl p-lg">
+        <h3 class="text-title-sm font-semibold text-on-background mb-md">Upload File</h3>
+        <div id="upload-zone" onclick="document.getElementById('file-input').click()"
+             class="border-2 border-dashed border-outline-variant rounded-xl px-lg py-xl text-center cursor-pointer transition-all hover:border-primary hover:bg-surface-container-low">
+          <input type="file" id="file-input" accept=".txt,.csv" class="hidden"/>
+          <span class="material-symbols-outlined text-on-surface-variant opacity-40" style="font-size:36px">upload_file</span>
+          <p class="text-body-sm font-semibold text-on-surface mt-sm">Click to upload or drag &amp; drop</p>
+          <p class="text-body-sm text-on-surface-variant">.txt (one sentence per line) or .csv</p>
+          <p id="file-name-display" class="hidden mt-sm text-body-sm font-semibold text-primary"></p>
+        </div>
+        <div id="col-select-wrap" class="hidden mt-md">
+          <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">TEXT COLUMN</label>
+          <select id="col-select" class="w-full px-md py-sm border border-outline-variant rounded text-body-sm bg-surface focus:outline-none focus:ring-2 focus:ring-primary"></select>
+        </div>
+        <button id="batch-run-btn" onclick="runBatch()" disabled
+          class="w-full mt-md py-sm bg-primary text-on-primary font-semibold rounded flex items-center justify-center gap-xs text-body-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary-container">
+          <span class="material-symbols-outlined text-[18px]">play_arrow</span>Run Batch Analysis
+        </button>
+      </section>
+
+      <section class="bg-surface border border-outline-variant rounded-xl p-lg">
+        <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">HOW IT WORKS</h3>
+        <ol class="space-y-sm text-body-sm text-on-surface-variant list-none">
+          <li class="flex gap-sm items-start"><span class="w-5 h-5 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">1</span>Upload a <strong class="text-on-surface">.txt</strong> file (one sentence per line) or a <strong class="text-on-surface">.csv</strong> with a text column.</li>
+          <li class="flex gap-sm items-start"><span class="w-5 h-5 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">2</span>Each sentence is processed through the full NLP pipeline independently.</li>
+          <li class="flex gap-sm items-start"><span class="w-5 h-5 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">3</span>Results appear in a filterable table with confidence scores and entities.</li>
+          <li class="flex gap-sm items-start"><span class="w-5 h-5 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">4</span>High-confidence ADR detections (&ge;85%) are flagged &#9888; for priority review.</li>
+          <li class="flex gap-sm items-start"><span class="w-5 h-5 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">5</span>Export the full result set as CSV for downstream reporting.</li>
+        </ol>
+      </section>
+    </div>
+
+    <!-- Results -->
+    <div class="xl:col-span-3">
+      <div id="batch-progress" class="hidden bg-surface border border-outline-variant rounded-xl p-lg mb-lg">
+        <p id="batch-progress-txt" class="text-body-sm text-on-surface-variant mb-sm">Uploading…</p>
+        <div class="w-full bg-surface-container-high rounded-full h-2 overflow-hidden">
+          <div id="batch-progress-bar" class="bg-primary h-full rounded-full conf-bar-fill w-full"></div>
+        </div>
+      </div>
+      <div id="batch-results-area">
+        <div class="text-center py-2xl text-on-surface-variant">
+          <span class="material-symbols-outlined opacity-25" style="font-size:40px">table_chart</span>
+          <p class="text-body-sm font-semibold mt-sm text-on-surface-variant">No batch results yet</p>
+          <p class="text-body-sm text-on-surface-variant mt-xs opacity-70">Upload a file and click Run Batch Analysis</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PANEL 3 — MODEL INSIGHTS
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="content-insights" class="content-panel hidden p-lg fade-in">
+  <div class="mb-lg pb-lg border-b border-outline-variant">
+    <h2 class="text-headline-md font-semibold text-on-background">Model Performance Insights</h2>
+    <p class="text-body-sm text-on-surface-variant mt-xs">PubMedBERT fine-tuned on Ghanaian pharmacovigilance data (Phase 3 DAPT)</p>
+  </div>
+
+  <!-- Classification metrics — single contained strip, not identical cards -->
+  <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">CLASSIFICATION METRICS</h3>
+  <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden mb-lg">
+    <div class="grid grid-cols-2 xl:grid-cols-4 divide-y xl:divide-y-0 xl:divide-x divide-outline-variant">
+      <div class="px-lg py-md">
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">F1 SCORE</p>
+        <p class="text-display-lg font-bold text-on-background">0.784</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+      </div>
+      <div class="px-lg py-md">
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">PRECISION</p>
+        <p class="text-display-lg font-bold text-on-background">0.801</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+      </div>
+      <div class="px-lg py-md">
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">RECALL</p>
+        <p class="text-display-lg font-bold text-on-background">0.768</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+      </div>
+      <div class="px-lg py-md">
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">AUC-ROC</p>
+        <p class="text-display-lg font-bold text-on-background">0.847</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NER metrics -->
+  <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">NER PERFORMANCE BY ENTITY TYPE</h3>
+  <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden mb-lg">
+    <table class="w-full text-left text-body-sm">
+      <thead>
+        <tr class="bg-surface-container-low border-b border-outline-variant">
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Entity Type</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">F1</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Precision</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Recall</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant w-1/3">F1 Bar</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-outline-variant">
+        <tr>
+          <td class="px-lg py-sm"><span class="entity-drug px-sm rounded font-semibold text-body-sm">DRUG</span></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.891</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.912</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.871</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#d97706] h-full rounded-full" style="width:89.1%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="px-lg py-sm"><span class="entity-adr px-sm rounded font-semibold text-body-sm">ADR</span></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.743</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.768</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.719</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-secondary h-full rounded-full" style="width:74.3%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="px-lg py-sm"><span class="entity-severity px-sm rounded font-semibold text-body-sm">SEVERITY</span></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.698</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.724</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.674</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#ea580c] h-full rounded-full" style="width:69.8%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="px-lg py-sm"><span class="entity-patient px-sm rounded font-semibold text-body-sm">PATIENT_DEMO</span></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.712</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.745</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.682</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#7c3aed] h-full rounded-full" style="width:71.2%"></div></div></td>
+        </tr>
+        <tr class="bg-surface-container-low">
+          <td class="px-lg py-sm font-semibold text-primary text-body-sm">Overall NER</td>
+          <td class="px-lg py-sm font-mono font-bold text-primary text-body-sm">0.746</td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.787</td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.737</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-primary h-full rounded-full" style="width:74.6%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Architecture + training -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-lg">
+    <div class="bg-surface border border-outline-variant rounded-xl p-lg">
+      <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">MODEL ARCHITECTURE</h3>
+      <div class="divide-y divide-outline-variant text-body-sm">
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Base Model</span><span class="font-semibold font-mono text-right text-[12px]">BiomedBERT-base-uncased</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">DAPT Phase</span><span class="font-semibold">Phase 3 (128k sentences)</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Fine-tuning</span><span class="font-semibold">Joint CLF + NER heads</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Max Token Length</span><span class="font-semibold font-mono">256</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Post-processing</span><span class="font-semibold">BIO correction + gazetteer</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Negation Guard</span><span class="font-semibold text-green-700">&#10003; Active (8 patterns)</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Ghanaian Synonyms</span><span class="font-semibold text-green-700">&#10003; Active (20 phrases)</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">MedDRA Normalisation</span><span class="font-semibold text-green-700">&#10003; Active (40 terms)</span></div>
+      </div>
+    </div>
+    <div class="bg-surface border border-outline-variant rounded-xl p-lg">
+      <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">TRAINING DATA BREAKDOWN</h3>
+      <div class="divide-y divide-outline-variant text-body-sm">
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Gold (manually annotated)</span><span class="font-semibold font-mono">510</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Silver (weakly supervised)</span><span class="font-semibold font-mono">1,240</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Augmented</span><span class="font-semibold font-mono">1,120</span></div>
+        <div class="flex justify-between py-sm border-t-2 border-primary"><span class="font-semibold text-primary">Total Sentences</span><span class="font-bold font-mono text-primary">2,870</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">ADR-positive rate</span><span class="font-semibold text-secondary">11.3% (323)</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Drug entity mentions</span><span class="font-semibold font-mono">863</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">ADR entity mentions</span><span class="font-semibold font-mono">561</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Data sources</span><span class="font-semibold">16 Ghanaian sources</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PANEL 4 — GHANAIAN DATASETS
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="content-datasets" class="content-panel hidden p-lg fade-in">
+  <div class="mb-lg pb-lg border-b border-outline-variant flex flex-wrap items-end justify-between gap-md">
+    <div>
+      <h2 class="text-headline-md font-semibold text-on-background">Ghanaian Datasets</h2>
+      <p class="text-body-sm text-on-surface-variant mt-xs">16 pharmacovigilance and clinical sources used for training</p>
+    </div>
+    <!-- Inline summary — no identical card grid -->
+    <div class="flex items-center gap-lg">
+      <div class="flex items-baseline gap-xs">
+        <span class="text-headline-md font-bold text-primary">2,870</span>
+        <span class="text-body-sm text-on-surface-variant">sentences</span>
+      </div>
+      <div class="h-6 w-px bg-outline-variant"></div>
+      <div class="flex items-baseline gap-xs">
+        <span class="text-headline-md font-bold text-secondary">323</span>
+        <span class="text-body-sm text-on-surface-variant">ADR-positive</span>
+      </div>
+      <div class="h-6 w-px bg-outline-variant"></div>
+      <div class="flex items-baseline gap-xs">
+        <span class="text-headline-md font-bold text-primary">16</span>
+        <span class="text-body-sm text-on-surface-variant">sources</span>
+      </div>
+    </div>
+  </div>
+  <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden">
+    <table class="w-full text-left text-body-sm">
+      <thead>
+        <tr class="bg-surface-container-low border-b border-outline-variant">
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">#</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Source</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Type</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant text-right">Records</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Period</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Region</th>
+        </tr>
+      </thead>
+      <tbody id="datasets-tbody" class="divide-y divide-outline-variant"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PANEL 5 — ALERTS
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="content-alerts" class="content-panel hidden p-lg fade-in">
+  <div class="mb-lg pb-lg border-b border-outline-variant flex flex-wrap items-end justify-between gap-md">
+    <div>
+      <h2 class="text-headline-md font-semibold text-on-background">ADR Alerts</h2>
+      <p class="text-body-sm text-on-surface-variant mt-xs">High-confidence detections flagged for clinical review</p>
+    </div>
+    <button onclick="showContent('single')" class="px-lg py-sm bg-primary text-on-primary font-semibold rounded text-body-sm flex items-center gap-xs hover:bg-primary-container transition-colors">
+      <span class="material-symbols-outlined text-[18px]">add</span>New Analysis
+    </button>
+  </div>
+
+  <!-- Inline summary strip — no identical card grid -->
+  <div class="flex flex-wrap items-center gap-xl py-md mb-lg border-y border-outline-variant">
+    <div class="flex items-baseline gap-sm">
+      <span class="text-display-lg font-bold text-on-background">8</span>
+      <span class="text-body-sm text-on-surface-variant">total</span>
+    </div>
+    <div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
+    <div class="flex items-baseline gap-sm">
+      <span class="text-display-lg font-bold text-secondary">3</span>
+      <span class="text-body-sm text-on-surface-variant">flagged</span>
+    </div>
+    <div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
+    <div class="flex items-baseline gap-sm">
+      <span class="text-display-lg font-bold" style="color:#92400e">3</span>
+      <span class="text-body-sm text-on-surface-variant">pending review</span>
+    </div>
+    <div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
+    <div class="flex items-baseline gap-sm">
+      <span class="text-display-lg font-bold" style="color:#166534">2</span>
+      <span class="text-body-sm text-on-surface-variant">reviewed</span>
+    </div>
+  </div>
+
+  <!-- Filters as pill tabs -->
+  <div class="flex items-center gap-xs mb-md flex-wrap">
+    <span class="text-label-caps font-label-caps text-on-surface-variant mr-xs">FILTER</span>
+    <label class="cursor-pointer">
+      <input type="radio" name="af" value="All" checked onchange="renderAlertsTable()" class="sr-only peer"/>
+      <span class="px-md py-xs text-body-sm font-medium rounded border border-outline-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors inline-block">All</span>
+    </label>
+    <label class="cursor-pointer">
+      <input type="radio" name="af" value="flagged" onchange="renderAlertsTable()" class="sr-only peer"/>
+      <span class="px-md py-xs text-body-sm font-medium rounded border border-outline-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors inline-block">Flagged</span>
+    </label>
+    <label class="cursor-pointer">
+      <input type="radio" name="af" value="pending" onchange="renderAlertsTable()" class="sr-only peer"/>
+      <span class="px-md py-xs text-body-sm font-medium rounded border border-outline-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors inline-block">Pending</span>
+    </label>
+    <label class="cursor-pointer">
+      <input type="radio" name="af" value="reviewed" onchange="renderAlertsTable()" class="sr-only peer"/>
+      <span class="px-md py-xs text-body-sm font-medium rounded border border-outline-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors inline-block">Reviewed</span>
+    </label>
+  </div>
+
+  <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden">
+    <table class="w-full text-left text-body-sm">
+      <thead>
+        <tr class="bg-surface-container-low border-b border-outline-variant">
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">ID</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Date</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Drug</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Suspected ADR</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant text-right">Confidence</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Status</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Action</th>
+        </tr>
+      </thead>
+      <tbody id="alerts-tbody" class="divide-y divide-outline-variant"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PANEL 6 — PROTOCOLS
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="content-protocols" class="content-panel hidden p-lg fade-in">
+  <div class="mb-lg pb-lg border-b border-outline-variant">
+    <h2 class="text-headline-md font-semibold text-on-background">ADR Reporting Protocols</h2>
+    <p class="text-body-sm text-on-surface-variant mt-xs">Ghana FDA pharmacovigilance reporting guidelines</p>
+  </div>
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-lg">
+    <div class="xl:col-span-2 space-y-md">
+
+      <div class="bg-surface border border-outline-variant rounded-xl p-lg">
+        <h3 class="text-title-sm font-semibold text-on-background mb-lg">Step-by-Step Reporting Workflow</h3>
+        <div class="space-y-lg">
+          <div class="flex gap-md">
+            <div class="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-body-sm flex items-center justify-center flex-shrink-0">1</div>
+            <div><h4 class="font-semibold text-on-background mb-xs">Detect</h4><p class="text-body-sm text-on-surface-variant">Identify suspected adverse drug reaction using clinical criteria. Look for temporal association between drug administration and onset of symptoms.</p></div>
+          </div>
+          <div class="flex gap-md">
+            <div class="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-body-sm flex items-center justify-center flex-shrink-0">2</div>
+            <div><h4 class="font-semibold text-on-background mb-xs">Document</h4><p class="text-body-sm text-on-surface-variant">Record patient details (age, sex, weight), drug name, dose, route, start/stop dates, concomitant medications, and full ADR description.</p></div>
+          </div>
+          <div class="flex gap-md">
+            <div class="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-body-sm flex items-center justify-center flex-shrink-0">3</div>
+            <div><h4 class="font-semibold text-on-background mb-xs">Assess Causality</h4><p class="text-body-sm text-on-surface-variant">Evaluate causality using the WHO-UMC scale: <strong>Certain</strong> / <strong>Probable</strong> / <strong>Possible</strong> / <strong>Unlikely</strong>. Consider dechallenge and rechallenge outcomes.</p></div>
+          </div>
+          <div class="flex gap-md">
+            <div class="w-8 h-8 rounded-full bg-secondary text-on-secondary font-bold text-body-sm flex items-center justify-center flex-shrink-0">4</div>
+            <div><h4 class="font-semibold text-on-background mb-xs">Report <span class="text-secondary text-[11px] font-label-caps">(REQUIRED)</span></h4><p class="text-body-sm text-on-surface-variant">Submit Yellow Card to Ghana FDA within <strong>15 days</strong> for non-serious ADRs. <strong>7 days</strong> for serious or unexpected reactions. Use the online portal or paper form.</p></div>
+          </div>
+          <div class="flex gap-md">
+            <div class="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-body-sm flex items-center justify-center flex-shrink-0">5</div>
+            <div><h4 class="font-semibold text-on-background mb-xs">Follow Up</h4><p class="text-body-sm text-on-surface-variant">Monitor patient outcome and update the initial report with resolution status, treatment given, and any long-term sequelae.</p></div>
+          </div>
+          <div class="flex gap-md">
+            <div class="w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-body-sm flex items-center justify-center flex-shrink-0">6</div>
+            <div><h4 class="font-semibold text-on-background mb-xs">Feedback Loop</h4><p class="text-body-sm text-on-surface-variant">Review Ghana FDA signal assessment communications and update prescribing practices. Attend quarterly pharmacovigilance review meetings.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface border border-outline-variant rounded-xl p-lg">
+        <h3 class="text-label-caps font-label-caps text-secondary mb-md">SERIOUS ADR CRITERIA — IMMEDIATE REPORTING REQUIRED</h3>
+        <ul class="space-y-xs text-body-sm text-on-surface-variant">
+          <li class="flex items-start gap-sm"><span class="text-secondary font-bold mt-0.5">&#9658;</span>Fatal or life-threatening reaction</li>
+          <li class="flex items-start gap-sm"><span class="text-secondary font-bold mt-0.5">&#9658;</span>Requires hospitalisation or prolonged inpatient care</li>
+          <li class="flex items-start gap-sm"><span class="text-secondary font-bold mt-0.5">&#9658;</span>Results in persistent or significant disability</li>
+          <li class="flex items-start gap-sm"><span class="text-secondary font-bold mt-0.5">&#9658;</span>Congenital anomaly or birth defect</li>
+          <li class="flex items-start gap-sm"><span class="text-secondary font-bold mt-0.5">&#9658;</span>Medically significant event (anaphylaxis, severe skin reaction, organ toxicity)</li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="space-y-lg">
+
+      <div class="bg-surface border border-outline-variant rounded-xl p-lg">
+        <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">GHANA FDA CONTACT</h3>
+        <div class="space-y-sm text-body-sm">
+          <div class="flex gap-sm items-start"><span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">location_on</span><span class="text-on-surface-variant">Ghana Food and Drugs Authority<br/>P.O. Box CT 2783, Cantonments, Accra</span></div>
+          <div class="flex gap-sm items-center"><span class="material-symbols-outlined text-primary text-[18px]">phone</span><span class="text-on-surface-variant">+233 302 233 200</span></div>
+          <div class="flex gap-sm items-center"><span class="material-symbols-outlined text-primary text-[18px]">email</span><span class="text-on-surface-variant">pv@fdaghana.gov.gh</span></div>
+          <div class="flex gap-sm items-center"><span class="material-symbols-outlined text-primary text-[18px]">language</span><span class="text-on-surface-variant">www.fdaghana.gov.gh</span></div>
+        </div>
+      </div>
+
+      <div class="bg-surface border border-outline-variant rounded-xl p-lg">
+        <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">REPORTING TIMELINES</h3>
+        <div class="divide-y divide-outline-variant text-body-sm">
+          <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Serious / Unexpected</span><span class="font-semibold text-secondary">7 days</span></div>
+          <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Non-serious</span><span class="font-semibold">15 days</span></div>
+          <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Periodic Safety Update</span><span class="font-semibold">6 months</span></div>
+          <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Annual Safety Report</span><span class="font-semibold">12 months</span></div>
+        </div>
+      </div>
+
+      <div class="bg-surface border border-outline-variant rounded-xl p-lg">
+        <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">REFERENCES</h3>
+        <ul class="space-y-xs text-body-sm text-on-surface-variant">
+          <li>WHO-UMC Causality Assessment System</li>
+          <li>Ghana FDA Good Pharmacovigilance Practice Guidelines (2021)</li>
+          <li>ICH E2A Clinical Safety Data Management</li>
+          <li>CIOMS Practical Aspects of Signal Detection</li>
+        </ul>
+      </div>
+
+      <button onclick="openModal()" class="w-full py-sm bg-secondary text-on-secondary font-semibold rounded flex items-center justify-center gap-xs text-body-sm hover:bg-secondary-container transition-colors">
+        <span class="material-symbols-outlined text-[18px]">report</span>Submit ADR Report Now
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PANEL 7 — ARCHIVE
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="content-archive" class="content-panel hidden p-lg fade-in">
+  <div class="mb-lg pb-lg border-b border-outline-variant flex flex-wrap items-end justify-between gap-md">
+    <div>
+      <h2 class="text-headline-md font-semibold text-on-background">Analysis Archive</h2>
+      <p class="text-body-sm text-on-surface-variant mt-xs">Past single-analysis runs — demo data</p>
+    </div>
+    <input type="text" id="archive-search" oninput="filterArchive()" placeholder="Search drug, ADR, text…"
+      class="px-md py-sm border border-outline-variant rounded text-body-sm bg-surface focus:outline-none focus:ring-2 focus:ring-primary w-64"/>
+  </div>
+  <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden">
+    <table class="w-full text-left text-body-sm">
+      <thead>
+        <tr class="bg-surface-container-low border-b border-outline-variant">
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Date</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Text Preview</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Classification</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant text-right">Confidence</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Drug</th>
+          <th class="px-lg py-sm text-label-caps font-label-caps text-on-surface-variant">Action</th>
+        </tr>
+      </thead>
+      <tbody id="archive-tbody" class="divide-y divide-outline-variant"></tbody>
+    </table>
+  </div>
+</div>
+
+</main>
+</div><!-- end app-body -->
+
+<!-- ═══ REPORT ADR MODAL ══════════════════════════════════════════════════ -->
+<div id="report-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-lg">
+  <div class="bg-surface w-full max-w-lg border border-outline-variant rounded-xl overflow-hidden" style="border-top:3px solid #00502e;">
+    <div class="flex justify-between items-center px-xl pt-lg pb-md border-b border-outline-variant">
+      <div>
+        <h3 class="text-title-sm font-semibold text-on-background">Report ADR to Ghana FDA</h3>
+        <p class="text-body-sm text-on-surface-variant mt-xs">Yellow Card Pharmacovigilance Report</p>
+      </div>
+      <button onclick="closeModal()" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" aria-label="Close">close</button>
+    </div>
+    <form onsubmit="submitReport(event)" class="px-xl py-lg space-y-md">
+      <div class="grid grid-cols-2 gap-md">
+        <div>
+          <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">REPORTER NAME</label>
+          <input type="text" class="w-full px-md py-sm border border-outline-variant rounded text-body-sm focus:outline-none focus:ring-2 focus:ring-primary bg-surface" placeholder="Dr. / Pharmacist name"/>
+        </div>
+        <div>
+          <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">FACILITY</label>
+          <input type="text" class="w-full px-md py-sm border border-outline-variant rounded text-body-sm focus:outline-none focus:ring-2 focus:ring-primary bg-surface" placeholder="Hospital / Clinic"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-md">
+        <div>
+          <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">DRUG NAME</label>
+          <input id="modal-drug" type="text" class="w-full px-md py-sm border border-outline-variant rounded text-body-sm focus:outline-none focus:ring-2 focus:ring-primary bg-surface" placeholder="Generic or brand name"/>
+        </div>
+        <div>
+          <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">SEVERITY</label>
+          <select class="w-full px-md py-sm border border-outline-variant rounded text-body-sm focus:outline-none focus:ring-2 focus:ring-primary bg-surface">
+            <option>Mild</option><option>Moderate</option><option>Severe</option><option>Life-threatening</option><option>Fatal</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">ADR DESCRIPTION</label>
+        <textarea id="modal-adr" rows="3" class="w-full px-md py-sm border border-outline-variant rounded text-body-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary bg-surface" placeholder="Describe the suspected adverse reaction…"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-md">
+        <div>
+          <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">PATIENT AGE</label>
+          <input type="number" class="w-full px-md py-sm border border-outline-variant rounded text-body-sm focus:outline-none focus:ring-2 focus:ring-primary bg-surface" placeholder="Years"/>
+        </div>
+        <div>
+          <label class="text-label-caps font-label-caps text-on-surface-variant block mb-xs">ONSET DATE</label>
+          <input type="date" class="w-full px-md py-sm border border-outline-variant rounded text-body-sm focus:outline-none focus:ring-2 focus:ring-primary bg-surface"/>
+        </div>
+      </div>
+      <div class="flex justify-end gap-md pt-sm border-t border-outline-variant">
+        <button type="button" onclick="closeModal()" class="px-lg py-sm border border-outline-variant rounded text-body-sm hover:bg-surface-container transition-colors">Cancel</button>
+        <button type="submit" class="px-lg py-sm bg-primary text-on-primary font-semibold rounded text-body-sm hover:bg-primary-container transition-colors">Submit Report</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═════════════════════════════════════════════════════════════ -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-sm pointer-events-none"></div>
+
+<!-- ═══ SCRIPT ════════════════════════════════════════════════════════════ -->
+<script>
+// ── Static data ──────────────────────────────────────────────────────────────
+const EXAMPLES = {
+  coartem:     "Patient is a 45-year-old male presenting at Korle Bu Teaching Hospital. After being prescribed Coartem for uncomplicated malaria, he experienced an acute Oculogyric crisis within 2 hours. Symptoms were severe, requiring immediate intervention.",
+  amoxicillin: "A 28-year-old female developed a severe rash and urticaria after taking Amoxicillin for a throat infection. The rash spread across the trunk and was accompanied by mild fever and pruritus.",
+  zidovudine:  "The patient on zidovudine therapy presented with severe anaemia requiring blood transfusion. Haemoglobin dropped to 6.2 g/dL within 8 weeks of initiating treatment.",
+  negative:    "The patient was discharged in stable condition after completing the prescribed course of antimalarials. No adverse effects were observed during the treatment period."
+};
+
+const ALERTS_DATA = [
+  { id:'ADR-2026-0891', date:'2026-06-13', drug:'Artemether/lumefantrine', adr:'QT prolongation',             conf:0.942, status:'flagged'  },
+  { id:'ADR-2026-0890', date:'2026-06-12', drug:'Co-trimoxazole',          adr:'Severe hypersensitivity',     conf:0.913, status:'flagged'  },
+  { id:'ADR-2026-0889', date:'2026-06-12', drug:'Zidovudine',              adr:'Severe anaemia',              conf:0.891, status:'flagged'  },
+  { id:'ADR-2026-0888', date:'2026-06-11', drug:'Efavirenz',               adr:'CNS disturbances',            conf:0.876, status:'pending'  },
+  { id:'ADR-2026-0887', date:'2026-06-10', drug:'Isoniazid',               adr:'Peripheral neuropathy',       conf:0.827, status:'pending'  },
+  { id:'ADR-2026-0886', date:'2026-06-09', drug:'Paracetamol',             adr:'Hepatotoxicity (possible)',   conf:0.683, status:'pending'  },
+  { id:'ADR-2026-0885', date:'2026-06-08', drug:'Chloroquine',             adr:'Visual disturbances',         conf:0.764, status:'reviewed' },
+  { id:'ADR-2026-0884', date:'2026-06-07', drug:'Quinine',                 adr:'Tinnitus',                    conf:0.798, status:'reviewed' },
+];
+
+const ARCHIVE_DATA = [
+  { date:'2026-06-13', text:'Patient developed oculogyric crisis after Coartem administration…', cls:'ADR',     conf:0.924, drug:'Coartem' },
+  { date:'2026-06-12', text:'No adverse effects observed following prophylactic antimalarial…',   cls:'Non-ADR', conf:0.954, drug:'—' },
+  { date:'2026-06-12', text:'Severe anaemia reported in patient on zidovudine therapy…',          cls:'ADR',     conf:0.891, drug:'Zidovudine' },
+  { date:'2026-06-11', text:'Patient tolerated artesunate-amodiaquine treatment well…',           cls:'Non-ADR', conf:0.876, drug:'—' },
+  { date:'2026-06-10', text:'CNS disturbances including vivid dreams reported after efavirenz…',  cls:'ADR',     conf:0.843, drug:'Efavirenz' },
+  { date:'2026-06-09', text:'Co-trimoxazole hypersensitivity reaction with urticaria and rash…',  cls:'ADR',     conf:0.912, drug:'Co-trimoxazole' },
+  { date:'2026-06-08', text:'Routine antimalarial treatment completed without incident…',         cls:'Non-ADR', conf:0.967, drug:'—' },
+  { date:'2026-06-07', text:'Peripheral neuropathy symptoms in isoniazid-treated patient…',       cls:'ADR',     conf:0.827, drug:'Isoniazid' },
+];
+
+const DATASETS = [
+  { name:'Ghana FDA National Pharmacovigilance Centre', type:'ADR Reports',        records:412, period:'2015–2024', region:'National'      },
+  { name:'Korle Bu Teaching Hospital',                  type:'Clinical Records',   records:287, period:'2018–2024', region:'Greater Accra' },
+  { name:'Komfo Anokye Teaching Hospital',              type:'Pharmacovigilance',  records:231, period:'2017–2024', region:'Ashanti'       },
+  { name:'Tamale Teaching Hospital',                    type:'Clinical Notes',     records:156, period:'2019–2024', region:'Northern'      },
+  { name:'Ghana Medical Journal',                       type:'Case Reports',       records:198, period:'2010–2024', region:'National'      },
+  { name:'West African Journal of Medicine',            type:'Research Articles',  records:143, period:'2012–2024', region:'West Africa'   },
+  { name:'Journal of Medical & Biomedical Sci. (UDS)', type:'Research Articles',  records:89,  period:'2014–2024', region:'Upper East/West'},
+  { name:'Ghana Malaria Programme (NMCP)',              type:'Surveillance Data',  records:178, period:'2016–2024', region:'National'      },
+  { name:'NACP HIV/AIDS Treatment Records',             type:'Programme Data',     records:264, period:'2015–2024', region:'National'      },
+  { name:'NTLCP TB Programme Surveillance',             type:'Surveillance Data',  records:121, period:'2017–2024', region:'National'      },
+  { name:'NHIS Pharmacovigilance Reports',              type:'Claims Data',        records:203, period:'2019–2024', region:'National'      },
+  { name:'Kintampo Health Research Centre',             type:'Research Database',  records:97,  period:'2016–2024', region:'Bono East'     },
+  { name:'Noguchi Memorial Institute (NMIMR)',          type:'Clinical Research',  records:112, period:'2015–2024', region:'Greater Accra' },
+  { name:'University of Ghana Medical School',          type:'Academic Records',   records:134, period:'2014–2024', region:'Greater Accra' },
+  { name:'Cape Coast Teaching Hospital',                type:'Clinical Records',   records:98,  period:'2018–2024', region:'Central'       },
+  { name:'Community-Based Pharmacovigilance (CBP)',     type:'Community Reports',  records:143, period:'2020–2024', region:'National'      },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+const DASHBOARD_PANELS = ['single','batch','insights','datasets'];
+let lastResult   = null;
+let batchData    = [];
+let currentFile  = null;
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function showContent(name) {
+  document.querySelectorAll('.content-panel').forEach(p => p.classList.add('hidden'));
+  const panel = document.getElementById('content-' + name);
+  if (panel) { panel.classList.remove('hidden'); panel.classList.add('fade-in'); }
+
+  const isDash = DASHBOARD_PANELS.includes(name);
+  const sidebar = document.getElementById('sidebar');
+  isDash ? sidebar.classList.remove('sidebar-force-hide') : sidebar.classList.add('sidebar-force-hide');
+
+  document.querySelectorAll('.sidebar-item').forEach(el => {
+    const active = el.dataset.nav === name;
+    el.className = el.className.replace(/snav-active|snav-inactive/g, '').trim();
+    el.classList.add(active ? 'snav-active' : 'snav-inactive');
+  });
+
+  const topKey = isDash ? 'dashboard' : name;
+  ['dashboard','alerts','protocols','archive'].forEach(k => {
+    const el = document.getElementById('tnav-' + k);
+    if (!el) return;
+    el.className = el.className.replace(/tnav-active|tnav-inactive/g, '').trim();
+    el.classList.add(k === topKey ? 'tnav-active' : 'tnav-inactive');
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function statCardHtml(val, lbl) {
+  return `<div class="bg-surface border border-outline-variant rounded p-md">
+    <p class="text-body-sm text-on-surface-variant mb-xs">${lbl}</p>
+    <p class="text-title-sm font-bold text-primary">${val}</p>
+  </div>`;
+}
+
+// ── Single Analysis ───────────────────────────────────────────────────────────
+const LABEL_CLASS = { DRUG:'entity-drug', ADR:'entity-adr', SEVERITY:'entity-severity', PATIENT_DEMO:'entity-patient' };
+
+function loadExample(key) {
+  document.getElementById('clinical-input').value = EXAMPLES[key] || '';
+  updateCharCount();
+  document.getElementById('results-section').classList.add('hidden');
+  showContent('single');
+}
+
+function clearAnalysis() {
+  document.getElementById('clinical-input').value = '';
+  updateCharCount();
+  document.getElementById('results-section').classList.add('hidden');
+  document.getElementById('char-count').textContent = '0 characters · 0 words';
+  document.getElementById('conf-adr').textContent = '—';
+  document.getElementById('conf-no-adr').textContent = '—';
+  document.getElementById('bar-adr').style.transform = 'scaleX(0)';
+  document.getElementById('bar-no-adr').style.transform = 'scaleX(0)';
+  document.getElementById('entity-table-body').innerHTML =
+    '<tr><td colspan="3" class="px-md py-lg text-on-surface-variant text-center text-body-sm">Run analysis to see entities</td></tr>';
+  document.getElementById('verify-btn').textContent = 'Mark as Clinically Verified';
+  document.getElementById('verify-btn').disabled = false;
+  document.getElementById('verify-btn').className = document.getElementById('verify-btn').className
+    .replace('border-green-600 text-green-700 bg-green-50','border-primary text-primary');
+  lastResult = null;
+}
+
+function updateCharCount() {
+  const t = document.getElementById('clinical-input').value;
+  const words = t.trim() ? t.trim().split(/\s+/).length : 0;
+  document.getElementById('char-count').textContent = `${t.length} characters · ${words} words`;
+}
+
+function buildAnnotatedHtml(text, entities) {
+  if (!entities || !entities.length) return escapeHtml(text);
+  const sorted = [...entities].sort((a, b) => a.start - b.start);
+  let html = '', cursor = 0;
+  for (const ent of sorted) {
+    if (ent.start < cursor) continue;
+    html += escapeHtml(text.slice(cursor, ent.start));
+    const cls = LABEL_CLASS[ent.label] || '';
+    html += `<span class="${cls}" title="${ent.label}${ent.meddra_pt ? ' · '+ent.meddra_pt : ''}">${escapeHtml(text.slice(ent.start, ent.end))}</span>`;
+    cursor = ent.end;
+  }
+  html += escapeHtml(text.slice(cursor));
+  return html;
+}
+
+async function runAnalysis() {
+  const text = document.getElementById('clinical-input').value.trim();
+  if (!text) { showToast('Please enter some clinical text first.', 'warning'); return; }
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true; btn.textContent = 'Running…';
+  document.getElementById('results-section').classList.add('hidden');
+  try {
+    const res = await fetch('/api/analyse', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ text })
+    }).then(r => r.json());
+    lastResult = res;
+    renderResults(res, text);
+  } catch (e) {
+    showToast('Analysis failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Run Analysis Engine';
+  }
+}
+
+function renderResults(res, text) {
+  const isAdr = res.is_adr;
+  const confPct = (res.confidence * 100).toFixed(1) + '%';
+  const noAdrPct = ((1 - res.confidence) * 100).toFixed(1) + '%';
+
+  const banner = document.getElementById('result-banner');
+  if (isAdr) {
+    banner.className = 'bg-secondary px-lg py-md flex items-center justify-between text-on-secondary';
+    document.getElementById('result-icon').textContent = 'warning';
+  } else {
+    banner.className = 'bg-primary px-lg py-md flex items-center justify-between text-on-primary';
+    document.getElementById('result-icon').textContent = 'check_circle';
+  }
+  document.getElementById('result-label').textContent = isAdr ? 'ADR Detected' : 'No ADR Detected';
+  document.getElementById('result-sub').textContent   = res.explanation || '';
+  document.getElementById('severity-badge').textContent = isAdr ? 'High Severity' : 'Normal';
+
+  const flagPillsEl = document.getElementById('flag-pills');
+  flagPillsEl.innerHTML = '';
+  if (res.uncertain)         flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-yellow-100 text-yellow-800 text-[10px] font-semibold rounded">Uncertain</span>';
+  if (res.rule_triggered)    flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-blue-100 text-blue-800 text-[10px] font-semibold rounded">Rule Override</span>';
+  if (res.negation_override) flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-purple-100 text-purple-800 text-[10px] font-semibold rounded">Negation</span>';
+
+  document.getElementById('conf-adr').textContent    = isAdr ? confPct : noAdrPct;
+  document.getElementById('conf-no-adr').textContent = isAdr ? noAdrPct : confPct;
+  setTimeout(() => {
+    const adrScale   = isAdr ? res.confidence : 1 - res.confidence;
+    const noAdrScale = isAdr ? 1 - res.confidence : res.confidence;
+    document.getElementById('bar-adr').style.transform    = `scaleX(${adrScale.toFixed(3)})`;
+    document.getElementById('bar-no-adr').style.transform = `scaleX(${noAdrScale.toFixed(3)})`;
+  }, 50);
+
+  document.getElementById('annotated-text').innerHTML = buildAnnotatedHtml(text, res.entities);
+
+  const tbody = document.getElementById('entity-table-body');
+  if (res.entities && res.entities.length) {
+    tbody.innerHTML = res.entities.map(e => {
+      const cls  = LABEL_CLASS[e.label] || '';
+      const conf = e.confidence != null ? e.confidence.toFixed(3) : '—';
+      return `<tr class="hover:bg-surface-container-low">
+        <td class="px-md py-sm"><span class="${cls}">${escapeHtml(e.text)}</span></td>
+        <td class="px-md py-sm text-[10px] font-label-caps text-on-surface-variant">${e.label}</td>
+        <td class="px-md py-sm text-right font-mono text-body-sm">${conf}</td>
+      </tr>`;
+    }).join('');
+  } else {
+    tbody.innerHTML = '<tr><td colspan="3" class="px-md py-sm text-on-surface-variant text-center text-body-sm">No entities detected</td></tr>';
+  }
+
+  document.getElementById('results-section').classList.remove('hidden');
+  document.getElementById('verify-btn').textContent = 'Mark as Clinically Verified';
+  document.getElementById('verify-btn').disabled = false;
+}
+
+function exportJSON() {
+  if (!lastResult) return;
+  const blob = new Blob([JSON.stringify(lastResult, null, 2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ghana_adr_result.json'; a.click();
+}
+
+function markVerified() {
+  const btn = document.getElementById('verify-btn');
+  btn.textContent = '&#10003; Clinically Verified';
+  btn.disabled = true;
+  btn.className = btn.className.replace('border-primary text-primary', 'border-green-600 text-green-700 bg-green-50');
+  showToast('Result marked as clinically verified.', 'success');
+}
+
+// ── Batch Analysis ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput  = document.getElementById('file-input');
+  const uploadZone = document.getElementById('upload-zone');
+  if (!fileInput || !uploadZone) return;
+
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+  uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', ()  => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault(); uploadZone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+
+  renderDatasetsTable();
+  renderAlertsTable();
+  renderArchiveTable(ARCHIVE_DATA);
+});
+
+async function handleFile(file) {
+  currentFile = file;
+  const disp = document.getElementById('file-name-display');
+  disp.textContent = '&#128196; ' + file.name; disp.classList.remove('hidden');
+  document.getElementById('batch-run-btn').disabled = false;
+  document.getElementById('col-select-wrap').classList.add('hidden');
+
+  if (file.name.toLowerCase().endsWith('.csv')) {
+    const fd = new FormData(); fd.append('file', file);
+    try {
+      const res = await fetch('/api/columns', { method:'POST', body:fd }).then(r => r.json());
+      if (res.columns && res.columns.length) {
+        const sel = document.getElementById('col-select');
+        sel.innerHTML = res.columns.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+        document.getElementById('col-select-wrap').classList.remove('hidden');
+      }
+    } catch (_) {}
+  }
+}
+
+async function runBatch() {
+  if (!currentFile) return;
+  const btn = document.getElementById('batch-run-btn');
+  btn.disabled = true;
+
+  const progressWrap = document.getElementById('batch-progress');
+  const progressBar  = document.getElementById('batch-progress-bar');
+  const progressTxt  = document.getElementById('batch-progress-txt');
+  progressWrap.classList.remove('hidden');
+  progressBar.style.transform = 'scaleX(0.15)';
+  progressTxt.textContent = 'Uploading file…';
+  document.getElementById('batch-results-area').innerHTML = '';
+
+  const fd = new FormData(); fd.append('file', currentFile);
+  const colSel = document.getElementById('col-select');
+  if (!currentFile.name.toLowerCase().endsWith('.txt') && colSel) {
+    fd.append('text_column', colSel.value);
+  }
+
+  try {
+    progressBar.style.transform = 'scaleX(0.5)'; progressTxt.textContent = 'Running NLP pipeline…';
+    const res = await fetch('/api/batch', { method:'POST', body:fd }).then(r => r.json());
+    progressBar.style.transform = 'scaleX(1)';
+    setTimeout(() => {
+      progressWrap.classList.add('hidden');
+      if (res.error) {
+        document.getElementById('batch-results-area').innerHTML =
+          `<div class="bg-error-container border border-secondary/20 rounded p-lg text-body-sm text-secondary">Error: ${escapeHtml(res.error)}</div>`;
+      } else {
+        renderBatchResults(res.results);
+      }
+    }, 300);
+  } catch (e) {
+    progressWrap.classList.add('hidden');
+    document.getElementById('batch-results-area').innerHTML =
+      `<div class="bg-error-container border border-secondary/20 rounded p-lg text-body-sm text-secondary">Error: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+}
+
+function renderBatchResults(results) {
+  batchData = results;
+  const total    = results.length;
+  const adrCount = results.filter(r => r.classification === 'ADR').length;
+  const adrRate  = total ? (adrCount / total * 100).toFixed(1) + '%' : '—';
+  const avgConf  = total ? (results.reduce((s, r) => s + r.confidence, 0) / total * 100).toFixed(1) + '%' : '—';
+  const flagged  = results.filter(r => r.flag).length;
+
+  document.getElementById('batch-results-area').innerHTML = `
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-md mb-lg fade-in">
+      ${statCardHtml(total, 'TOTAL PROCESSED')}
+      ${statCardHtml('<span class="text-secondary">' + adrCount + '</span>', 'ADR DETECTED')}
+      ${statCardHtml(adrRate, 'ADR RATE')}
+      ${statCardHtml(avgConf, 'AVG CONFIDENCE')}
+    </div>
+    <div class="flex items-center gap-md mb-md flex-wrap text-body-sm">
+      <span class="text-label-caps font-label-caps text-on-surface-variant">SHOW</span>
+      <div class="flex gap-xs">
+        <label class="cursor-pointer"><input type="radio" name="bf" value="All" checked onchange="applyBatchFilter()" class="sr-only peer"/><span class="px-md py-xs text-body-sm font-medium rounded border border-outline-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors inline-block">All</span></label>
+        <label class="cursor-pointer"><input type="radio" name="bf" value="ADR" onchange="applyBatchFilter()" class="sr-only peer"/><span class="px-md py-xs text-body-sm font-medium rounded border border-outline-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors inline-block">ADR Only</span></label>
+        <label class="cursor-pointer"><input type="radio" name="bf" value="Non-ADR" onchange="applyBatchFilter()" class="sr-only peer"/><span class="px-md py-xs text-body-sm font-medium rounded border border-outline-variant peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-colors inline-block">Non-ADR Only</span></label>
+      </div>
+      <span class="text-label-caps font-label-caps text-on-surface-variant">MIN CONF</span>
+      <input type="range" min="0" max="1" step="0.05" value="0" id="conf-slider" class="accent-primary"
+             oninput="document.getElementById('conf-label').textContent=(parseFloat(this.value)*100).toFixed(0)+'%';applyBatchFilter()">
+      <span id="conf-label" class="font-mono text-on-surface-variant text-body-sm">0%</span>
+      <span class="text-body-sm text-on-surface-variant ml-auto">${flagged} high-confidence flags (&ge;85%)</span>
+    </div>
+    <div id="batch-table-wrap" class="mb-md"></div>
+    <button onclick="exportBatchCSV()" class="px-lg py-sm border border-primary text-primary font-semibold rounded text-body-sm flex items-center gap-xs hover:bg-primary hover:text-on-primary transition-colors">
+      <span class="material-symbols-outlined text-[18px]">download</span>Export Results as CSV
+    </button>`;
+  renderBatchTable(results);
+}
+
+function renderBatchTable(rows) {
+  const wrap = document.getElementById('batch-table-wrap');
+  if (!wrap) return;
+  if (!rows.length) {
+    wrap.innerHTML = '<p class="text-body-sm text-on-surface-variant py-lg">No results match the current filter.</p>';
+    return;
+  }
+  wrap.innerHTML = `<div class="overflow-x-auto rounded border border-outline-variant">
+    <table class="w-full text-left text-body-sm">
+      <thead><tr class="bg-surface-container-low border-b border-outline-variant">
+        <th class="px-md py-sm text-label-caps font-label-caps text-on-surface-variant">#</th>
+        <th class="px-md py-sm text-label-caps font-label-caps text-on-surface-variant">Text</th>
+        <th class="px-md py-sm text-label-caps font-label-caps text-on-surface-variant">Classification</th>
+        <th class="px-md py-sm text-label-caps font-label-caps text-on-surface-variant">Confidence</th>
+        <th class="px-md py-sm text-label-caps font-label-caps text-on-surface-variant">Entities</th>
+        <th class="px-md py-sm text-label-caps font-label-caps text-on-surface-variant text-center">Flag</th>
+      </tr></thead>
+      <tbody class="divide-y divide-outline-variant bg-surface">
+        ${rows.map(r => `<tr class="hover:bg-surface-container-low transition-colors">
+          <td class="px-md py-sm font-mono text-on-surface-variant text-[11px]">${r.index}</td>
+          <td class="px-md py-sm max-w-[220px] truncate text-on-surface" title="${escapeHtml(r.full_text||r.text)}">${escapeHtml(r.text)}</td>
+          <td class="px-md py-sm">
+            <span class="px-sm py-xs text-[10px] font-semibold font-label-caps rounded-full ${r.classification==='ADR'?'bg-error-container text-secondary':'bg-surface-container text-primary'}">
+              ${r.classification}
+            </span>
+          </td>
+          <td class="px-md py-sm">
+            <div class="flex items-center gap-sm">
+              <div class="flex-1 bg-surface-container-high rounded-full h-2 overflow-hidden min-w-[48px]">
+                <div class="${r.classification==='ADR'?'bg-secondary':'bg-primary'} h-full rounded-full" style="width:${(r.confidence*100).toFixed(0)}%"></div>
+              </div>
+              <span class="font-mono text-[11px] text-on-surface-variant">${(r.confidence*100).toFixed(1)}%</span>
+            </div>
+          </td>
+          <td class="px-md py-sm text-on-surface-variant text-[12px] max-w-[160px] truncate">${escapeHtml(r.entities)}</td>
+          <td class="px-md py-sm text-center">${r.flag||''}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function applyBatchFilter() {
+  const show = document.querySelector('input[name="bf"]:checked')?.value || 'All';
+  const minC = parseFloat(document.getElementById('conf-slider')?.value || '0');
+  let rows = batchData;
+  if (show === 'ADR')     rows = rows.filter(r => r.classification === 'ADR');
+  if (show === 'Non-ADR') rows = rows.filter(r => r.classification === 'Non-ADR');
+  rows = rows.filter(r => r.confidence >= minC);
+  renderBatchTable(rows);
+}
+
+function exportBatchCSV() {
+  if (!batchData.length) return;
+  const cols   = ['index','full_text','classification','confidence','entities','flag'];
+  const header = ['#','Text','Classification','Confidence','Entities','Flag'].join(',');
+  const csv    = [header, ...batchData.map(r => cols.map(c => `"${String(r[c]??'').replace(/"/g,'""')}"`).join(','))].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
+  a.download = 'ghana_adr_batch_results.csv'; a.click();
+}
+
+// ── Datasets ──────────────────────────────────────────────────────────────────
+function renderDatasetsTable() {
+  const tbody = document.getElementById('datasets-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = DATASETS.map((d, i) => `
+    <tr class="hover:bg-surface-container-low transition-colors ${i%2===0?'':'bg-surface-container-low/50'}">
+      <td class="px-lg py-sm font-mono text-on-surface-variant text-[11px]">${i+1}</td>
+      <td class="px-lg py-sm font-semibold text-on-background">${escapeHtml(d.name)}</td>
+      <td class="px-lg py-sm text-on-surface-variant">${escapeHtml(d.type)}</td>
+      <td class="px-lg py-sm text-right font-mono font-semibold text-primary">${d.records}</td>
+      <td class="px-lg py-sm text-on-surface-variant font-mono text-[12px]">${d.period}</td>
+      <td class="px-lg py-sm"><span class="px-sm py-xs bg-surface-container text-primary text-[10px] font-semibold rounded-full">${escapeHtml(d.region)}</span></td>
+    </tr>`).join('');
+}
+
+// ── Alerts ────────────────────────────────────────────────────────────────────
+function renderAlertsTable() {
+  const filter = document.querySelector('input[name="af"]:checked')?.value || 'All';
+  let rows = ALERTS_DATA;
+  if (filter !== 'All') rows = rows.filter(r => r.status === filter);
+  const tbody = document.getElementById('alerts-tbody');
+  if (!tbody) return;
+  const STATUS = {
+    flagged:  { cls:'bg-error-container text-secondary',    label:'&#9888; Flagged'   },
+    pending:  { cls:'bg-yellow-100 text-yellow-800',        label:'Pending'            },
+    reviewed: { cls:'bg-green-100 text-green-800',          label:'&#10003; Reviewed'  },
+  };
+  tbody.innerHTML = rows.map(r => {
+    const s = STATUS[r.status] || STATUS.pending;
+    return `<tr class="hover:bg-surface-container-low transition-colors">
+      <td class="px-lg py-sm font-mono text-[11px] text-on-surface-variant">${r.id}</td>
+      <td class="px-lg py-sm text-on-surface-variant">${r.date}</td>
+      <td class="px-lg py-sm font-semibold text-on-background">${escapeHtml(r.drug)}</td>
+      <td class="px-lg py-sm text-on-surface">${escapeHtml(r.adr)}</td>
+      <td class="px-lg py-sm text-right font-mono font-semibold ${r.conf>=0.85?'text-secondary':'text-primary'}">${(r.conf*100).toFixed(1)}%</td>
+      <td class="px-lg py-sm"><span class="px-sm py-xs text-[10px] font-semibold rounded-full ${s.cls}">${s.label}</span></td>
+      <td class="px-lg py-sm">
+        <button onclick="showToast('Alert ${escapeHtml(r.id)} opened for review.','info')" class="text-primary text-body-sm font-semibold hover:underline">Review</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Archive ───────────────────────────────────────────────────────────────────
+function renderArchiveTable(rows) {
+  const tbody = document.getElementById('archive-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = rows.map(r => `
+    <tr class="hover:bg-surface-container-low transition-colors">
+      <td class="px-lg py-sm text-on-surface-variant font-mono text-[12px]">${r.date}</td>
+      <td class="px-lg py-sm max-w-xs truncate text-on-surface">${escapeHtml(r.text)}</td>
+      <td class="px-lg py-sm">
+        <span class="px-sm py-xs text-[10px] font-semibold font-label-caps rounded-full ${r.cls==='ADR'?'bg-error-container text-secondary':'bg-surface-container text-primary'}">
+          ${r.cls}
+        </span>
+      </td>
+      <td class="px-lg py-sm text-right font-mono font-semibold ${r.cls==='ADR'?'text-secondary':'text-primary'}">${(r.conf*100).toFixed(1)}%</td>
+      <td class="px-lg py-sm">${r.drug!=='—'?`<span class="entity-drug px-xs rounded text-body-sm">${escapeHtml(r.drug)}</span>`:'<span class="text-on-surface-variant">—</span>'}</td>
+      <td class="px-lg py-sm">
+        <button onclick="loadArchiveEntry('${encodeURIComponent(r.text)}')" class="text-primary text-body-sm font-semibold hover:underline">Re-analyse</button>
+      </td>
+    </tr>`).join('');
+}
+
+function loadArchiveEntry(encodedText) {
+  const text = decodeURIComponent(encodedText);
+  document.getElementById('clinical-input').value = text;
+  updateCharCount();
+  showContent('single');
+  showToast('Text loaded. Click Run Analysis Engine.', 'info');
+}
+
+function filterArchive() {
+  const q = document.getElementById('archive-search').value.toLowerCase();
+  const filtered = ARCHIVE_DATA.filter(r =>
+    r.text.toLowerCase().includes(q) || r.drug.toLowerCase().includes(q) || r.cls.toLowerCase().includes(q)
+  );
+  renderArchiveTable(filtered);
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('report-modal').classList.remove('hidden');
+}
+function closeModal() {
+  document.getElementById('report-modal').classList.add('hidden');
+}
+function submitReport(e) {
+  e.preventDefault();
+  closeModal();
+  showToast('ADR report submitted to Ghana FDA pharmacovigilance database.', 'success');
+}
+document.addEventListener('click', e => {
+  if (e.target.id === 'report-modal') closeModal();
+});
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'info') {
+  const COLORS = { success:'bg-primary text-on-primary', info:'bg-[#1e40af] text-white', warning:'bg-yellow-600 text-white', error:'bg-secondary text-on-secondary' };
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast pointer-events-auto ${COLORS[type]||COLORS.info} px-lg py-sm rounded shadow-lg text-body-sm font-semibold min-w-[240px]`;
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3500);
+}
+</script>
+</body>
+</html>

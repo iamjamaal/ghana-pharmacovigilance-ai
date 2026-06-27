@@ -1,0 +1,39 @@
+{
+  "held_out_source": "cohort_study",
+  "silver_mode": "NER only (gold+aug+silver NER, gold+aug CLF)",
+  "n_total": 123,
+  "n_positive": 59,
+  "pct_positive": 48.0,
+  "clf_train_rows": 259,
+  "ner_train_rows": 550,
+  "ner_silver_rows": 287,
+  "v1aug_clf_f1": 0.768,
+  "v1aug_ner_f1": 0.659,
+  "clf_delta_vs_v1aug": 0.0079,
+  "ner_delta_vs_v1aug": 0.0954,
+  "clf_precision": 0.7895,
+  "clf_recall": 0.7627,
+  "clf_f1": 0.7759,
+  "ner_overall_f1": 0.7544,
+  "ner_precision": 0.7818,
+  "ner_recall": 0.7288,
+  "ner_per_tag": {
+    "DRUG": {
+      "f1": 0.7597,
+      "support": 251
+    },
+    "ADR": {
+      "f1": 0.8975,
+      "support": 177
+    },
+    "SEVERITY": {
+      "f1": 0.2105,
+      "support": 7,
+      "f1_note": "noisy (n<10)"
+    },
+    "PATIENT_DEMO": {
+      "f1": 0.0426,
+      "support": 37
+    }
+  }
+}

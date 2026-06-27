@@ -1,0 +1,218 @@
+{
+  "project": "Ghana ADR NLP Dataset Pipeline",
+  "description": "Builds a unified ADR dataset from publicly available Ghanaian health sources",
+  "challenge": "Ghana AI Innovation Challenge 2026",
+
+  "druglens_pdfs": [
+    {
+      "id": "druglens_03",
+      "url": "https://fdaghana.gov.gh/wp-content/uploads/2024/09/Druglens-Issue-3.pdf",
+      "issue": 3,
+      "year": 2015,
+      "source_type": "fda_newsletter"
+    },
+    {
+      "id": "druglens_05",
+      "url": "https://fdaghana.gov.gh/wp-content/uploads/2024/09/Druglens-Issue-5.pdf",
+      "issue": 5,
+      "year": 2017,
+      "source_type": "fda_newsletter"
+    },
+    {
+      "id": "druglens_07",
+      "url": "https://fdaghana.gov.gh/wp-content/uploads/2024/09/Druglens-Issue-7.pdf",
+      "issue": 7,
+      "year": 2019,
+      "source_type": "fda_newsletter"
+    },
+    {
+      "id": "druglens_09",
+      "url": "https://fdaghana.gov.gh/wp-content/uploads/2024/09/Druglens-Issue-9.pdf",
+      "issue": 9,
+      "year": 2021,
+      "source_type": "fda_newsletter"
+    },
+    {
+      "id": "druglens_10",
+      "url": "https://fdaghana.gov.gh/wp-content/uploads/2024/09/Druglens-Issue-10.pdf",
+      "issue": 10,
+      "year": 2022,
+      "source_type": "fda_newsletter"
+    }
+  ],
+
+  "fda_reports": [
+    {
+      "id": "fda_annual_2023",
+      "url": "https://fdaghana.gov.gh/wp-content/uploads/2024/09/2023-FDA-Annual-Report.pdf",
+      "year": 2023,
+      "source_type": "fda_annual_report"
+    },
+    {
+      "id": "fda_adr_guide_2025",
+      "url": "https://fdaghana.gov.gh/wp-content/uploads/2025/03/REPORTING-ADRs.pdf",
+      "year": 2025,
+      "source_type": "fda_guideline"
+    }
+  ],
+
+  "pmc_articles": [
+    {
+      "id": "coartem_oculogyric",
+      "pmcid": "PMC8134644",
+      "title": "Adverse reaction to Coartem resulting in oculogyric crisis",
+      "hospital": "Brong Ahafo Regional Hospital",
+      "year": 2021,
+      "source_type": "case_report",
+      "sections_of_interest": ["case-presentation", "case-report", "discussion"]
+    },
+    {
+      "id": "naphthalene_aki",
+      "pmcid": "PMC6620055",
+      "title": "Naphthalene induced acute kidney injury in Ghana",
+      "hospital": "Komfo Anokye Teaching Hospital",
+      "year": 2019,
+      "source_type": "case_report",
+      "sections_of_interest": ["case-presentation", "patient-information", "discussion"]
+    },
+    {
+      "id": "art_adr_korlebu",
+      "pmcid": "PMC4214560",
+      "title": "ADRs to antiretroviral therapy at Korle-Bu Fevers Unit",
+      "hospital": "Korle-Bu Teaching Hospital",
+      "year": 2014,
+      "source_type": "cohort_study",
+      "sections_of_interest": ["results", "discussion"]
+    },
+    {
+      "id": "covid_stimulated_adr",
+      "pmcid": "PMC8087363",
+      "title": "Stimulated spontaneous ADR reporting during COVID-19 in Ghana",
+      "hospital": "9 treatment centres across Ghana",
+      "year": 2020,
+      "source_type": "cohort_study",
+      "sections_of_interest": ["results", "discussion"]
+    },
+    {
+      "id": "patient_adr_interviews",
+      "pmcid": "PMC6299566",
+      "title": "Contribution of Ghanaian patients to ADR reporting",
+      "hospital": "28 facilities across 4 regions",
+      "year": 2018,
+      "source_type": "qualitative_interview",
+      "sections_of_interest": ["results", "discussion"]
+    },
+    {
+      "id": "act_reporting_northern",
+      "pmcid": "PMC4769557",
+      "title": "Factors influencing ADR reporting for ACTs in northern Ghana",
+      "hospital": "Northern Ghana health facilities",
+      "year": 2016,
+      "source_type": "qualitative_interview",
+      "sections_of_interest": ["results", "discussion"]
+    },
+    {
+      "id": "covid_vaccine_aefi",
+      "pmcid": "PMC11432875",
+      "title": "Adverse events following COVID-19 vaccination in Ghana",
+      "hospital": "National pharmacovigilance database",
+      "year": 2024,
+      "source_type": "cohort_study",
+      "sections_of_interest": ["results", "discussion"]
+    },
+    {
+      "id": "hiv_pep_korlebu",
+      "pmcid": "PMC4474444",
+      "title": "HIV PEP adverse events in Korle-Bu healthcare workers",
+      "hospital": "Korle-Bu Teaching Hospital",
+      "year": 2015,
+      "source_type": "cohort_study",
+      "sections_of_interest": ["results", "discussion"]
+    },
+    {
+      "id": "ho_underreporting",
+      "pmcid": "PMC10497160",
+      "title": "Under-reporting of ADRs in Ho Municipality, Volta Region",
+      "hospital": "Ho Municipal health facilities",
+      "year": 2023,
+      "source_type": "surveillance_evaluation",
+      "sections_of_interest": ["results", "discussion"]
+    }
+  ],
+
+  "annotation_schema": {
+    "entity_types": [
+      {
+        "label": "DRUG",
+        "description": "Any medication name — brand (Coartem, Efavirenz) or generic (artemether-lumefantrine, amodiaquine)",
+        "color": "#4CAF50"
+      },
+      {
+        "label": "ADR",
+        "description": "Adverse drug reaction symptom or condition (nausea, oculogyric crisis, hepatotoxicity)",
+        "color": "#F44336"
+      },
+      {
+        "label": "SEVERITY",
+        "description": "Severity indicator if stated (mild, moderate, severe, fatal, serious, life-threatening)",
+        "color": "#FF9800"
+      },
+      {
+        "label": "PATIENT_DEMO",
+        "description": "Patient demographics — age, sex, region (19-year-old male, female patient from Ashanti)",
+        "color": "#2196F3"
+      }
+    ],
+    "relation_types": [
+      {
+        "label": "CAUSES",
+        "description": "DRUG → causes → ADR",
+        "source_entity": "DRUG",
+        "target_entity": "ADR"
+      }
+    ],
+    "sentence_labels": [
+      {
+        "label": "contains_adr",
+        "type": "binary",
+        "description": "1 if sentence describes or mentions an adverse drug reaction, 0 otherwise"
+      }
+    ]
+  },
+
+  "ghana_drug_lexicon_seeds": [
+    "amodiaquine", "artesunate", "artemether-lumefantrine", "Coartem",
+    "sulfadoxine-pyrimethamine", "chloroquine", "hydroxychloroquine",
+    "doxycycline", "praziquantel", "ivermectin", "albendazole",
+    "nifedipine", "amlodipine", "lisinopril", "enalapril", "atenolol",
+    "metformin", "glibenclamide", "isoniazid", "rifampicin", "pyrazinamide",
+    "ethambutol", "streptomycin", "nevirapine", "efavirenz", "zidovudine",
+    "lamivudine", "tenofovir", "lopinavir", "ritonavir", "atazanavir",
+    "amoxicillin", "ceftriaxone", "ciprofloxacin", "metronidazole",
+    "diclofenac", "ibuprofen", "paracetamol", "tramadol",
+    "oxytocin", "misoprostol", "ergometrine",
+    "diazepam", "phenobarbital", "carbamazepine", "phenytoin",
+    "hyoscine butylbromide", "omeprazole", "ranitidine",
+    "AstraZeneca", "Pfizer-BioNTech", "Johnson & Johnson", "Sputnik V"
+  ],
+
+  "ghana_symptom_lexicon_seeds": {
+    "english_clinical": [
+      "oculogyric crisis", "Stevens-Johnson syndrome", "hepatotoxicity",
+      "nephrotoxicity", "agranulocytosis", "anaemia", "thrombocytopenia",
+      "peripheral neuropathy", "lactic acidosis", "lipodystrophy"
+    ],
+    "english_colloquial": [
+      "body weakness", "dizziness", "headache", "rash", "itching",
+      "swollen testes", "abdominal pain", "shivering", "palpitation",
+      "sleepless nights", "body discomfort", "cold peripheries",
+      "sudden collapse", "restlessness", "sweating", "double vision",
+      "scrotal pain", "dry throat", "gait disturbance"
+    ],
+    "twi_akan_candidates": [
+      "yaw (pain)", "ahoma (fever)", "fee/efee (nausea)",
+      "ayamtuo (stomach pain)", "tirim ka me (headache)",
+      "me ho ye me den (body weakness)", "ahome (dizziness)"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "held_out_source": "qualitative_interview",
+  "silver_mode": "NER only (gold+aug+silver NER, gold+aug CLF)",
+  "n_total": 78,
+  "n_positive": 20,
+  "pct_positive": 25.6,
+  "clf_train_rows": 297,
+  "ner_train_rows": 592,
+  "ner_silver_rows": 287,
+  "v1aug_clf_f1": 0.5,
+  "v1aug_ner_f1": 0.588,
+  "clf_delta_vs_v1aug": 0.1207,
+  "ner_delta_vs_v1aug": 0.0593,
+  "clf_precision": 0.4737,
+  "clf_recall": 0.9,
+  "clf_f1": 0.6207,
+  "ner_overall_f1": 0.6473,
+  "ner_precision": 0.6047,
+  "ner_recall": 0.6964,
+  "ner_per_tag": {
+    "DRUG": {
+      "f1": 0.5306,
+      "support": 18
+    },
+    "ADR": {
+      "f1": 0.8448,
+      "support": 59
+    },
+    "SEVERITY": {
+      "f1": 0.6154,
+      "support": 4,
+      "f1_note": "noisy (n<10)"
+    },
+    "PATIENT_DEMO": {
+      "f1": 0.381,
+      "support": 31
+    }
+  }
+}

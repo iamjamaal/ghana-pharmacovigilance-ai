@@ -1,0 +1,46 @@
+{
+  "held_out_source": "qualitative_interview",
+  "silver_mode": "Phase8: CLF=gold+aug+syn_ph7+syn_ph8+syn_ph8b+openfda NER=gold+aug+silver",
+  "n_synthetic_clf": 1744,
+  "n_synthetic_by_tag": {
+    "synthetic_phase7": 754,
+    "synthetic_phase8": 359,
+    "synthetic_phase8b": 302,
+    "openfda_harvest": 329
+  },
+  "n_total": 78,
+  "n_positive": 20,
+  "pct_positive": 25.6,
+  "clf_train_rows": 2041,
+  "ner_train_rows": 592,
+  "ner_silver_rows": 287,
+  "phase7_clf_f1": 0.5373,
+  "phase7_ner_f1": 0.6504,
+  "clf_delta_vs_phase7": 0.0252,
+  "ner_delta_vs_phase7": -0.0487,
+  "clf_precision": 0.4091,
+  "clf_recall": 0.9,
+  "clf_f1": 0.5625,
+  "ner_overall_f1": 0.6017,
+  "ner_precision": 0.5726,
+  "ner_recall": 0.6339,
+  "ner_per_tag": {
+    "DRUG": {
+      "f1": 0.4898,
+      "support": 18
+    },
+    "ADR": {
+      "f1": 0.8596,
+      "support": 59
+    },
+    "SEVERITY": {
+      "f1": 0.6154,
+      "support": 4,
+      "f1_note": "noisy (n<10)"
+    },
+    "PATIENT_DEMO": {
+      "f1": 0.2,
+      "support": 31
+    }
+  }
+}

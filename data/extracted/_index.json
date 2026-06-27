@@ -1,0 +1,114 @@
+[
+  {
+    "doc_id": "druglens_03",
+    "source_type": "fda_newsletter",
+    "year": 2015,
+    "origin": "Ghana FDA DrugLens Issue 3",
+    "char_count": 0
+  },
+  {
+    "doc_id": "druglens_05",
+    "source_type": "fda_newsletter",
+    "year": 2017,
+    "origin": "Ghana FDA DrugLens Issue 5",
+    "char_count": 27940
+  },
+  {
+    "doc_id": "druglens_07",
+    "source_type": "fda_newsletter",
+    "year": 2019,
+    "origin": "Ghana FDA DrugLens Issue 7",
+    "char_count": 40566
+  },
+  {
+    "doc_id": "druglens_09",
+    "source_type": "fda_newsletter",
+    "year": 2021,
+    "origin": "Ghana FDA DrugLens Issue 9",
+    "char_count": 37392
+  },
+  {
+    "doc_id": "druglens_10",
+    "source_type": "fda_newsletter",
+    "year": 2022,
+    "origin": "Ghana FDA DrugLens Issue 10",
+    "char_count": 34756
+  },
+  {
+    "doc_id": "fda_annual_2023",
+    "source_type": "fda_annual_report",
+    "year": 2023,
+    "origin": "Ghana FDA Fda Annual Report",
+    "char_count": 87484
+  },
+  {
+    "doc_id": "fda_adr_guide_2025",
+    "source_type": "fda_guideline",
+    "year": 2025,
+    "origin": "Ghana FDA Fda Guideline",
+    "char_count": 45843
+  },
+  {
+    "doc_id": "coartem_oculogyric",
+    "source_type": "case_report",
+    "year": 2021,
+    "origin": "PMC Open Access \u2014 Adverse reaction to Coartem resulting in oculogyric crisis",
+    "char_count": 8680
+  },
+  {
+    "doc_id": "naphthalene_aki",
+    "source_type": "case_report",
+    "year": 2019,
+    "origin": "PMC Open Access \u2014 Naphthalene induced acute kidney injury in Ghana",
+    "char_count": 12399
+  },
+  {
+    "doc_id": "art_adr_korlebu",
+    "source_type": "cohort_study",
+    "year": 2014,
+    "origin": "PMC Open Access \u2014 ADRs to antiretroviral therapy at Korle-Bu Fevers Unit",
+    "char_count": 23122
+  },
+  {
+    "doc_id": "covid_stimulated_adr",
+    "source_type": "cohort_study",
+    "year": 2020,
+    "origin": "PMC Open Access \u2014 Stimulated spontaneous ADR reporting during COVID-19 in Ghana",
+    "char_count": 35236
+  },
+  {
+    "doc_id": "patient_adr_interviews",
+    "source_type": "qualitative_interview",
+    "year": 2018,
+    "origin": "PMC Open Access \u2014 Contribution of Ghanaian patients to ADR reporting",
+    "char_count": 63923
+  },
+  {
+    "doc_id": "act_reporting_northern",
+    "source_type": "qualitative_interview",
+    "year": 2016,
+    "origin": "PMC Open Access \u2014 Factors influencing ADR reporting for ACTs in northern Ghana",
+    "char_count": 52215
+  },
+  {
+    "doc_id": "covid_vaccine_aefi",
+    "source_type": "cohort_study",
+    "year": 2024,
+    "origin": "PMC Open Access \u2014 Adverse events following COVID-19 vaccination in Ghana",
+    "char_count": 48266
+  },
+  {
+    "doc_id": "hiv_pep_korlebu",
+    "source_type": "cohort_study",
+    "year": 2015,
+    "origin": "PMC Open Access \u2014 HIV PEP adverse events in Korle-Bu healthcare workers",
+    "char_count": 53269
+  },
+  {
+    "doc_id": "ho_underreporting",
+    "source_type": "surveillance_evaluation",
+    "year": 2023,
+    "origin": "PMC Open Access \u2014 Under-reporting of ADRs in Ho Municipality, Volta Region",
+    "char_count": 66773
+  }
+]

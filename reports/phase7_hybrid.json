@@ -1,0 +1,133 @@
+{
+  "config": {
+    "clf": "Phase 6 standalone",
+    "ner": "Phase 7 standalone",
+    "phase6_thresholds": {
+      "case_report": 0.7,
+      "cohort_study": 0.55,
+      "fda_newsletter": 0.3,
+      "qualitative_interview": 0.6
+    }
+  },
+  "results": {
+    "case_report": {
+      "clf_precision": 0.6667,
+      "clf_recall": 0.96,
+      "clf_f1": 0.7869,
+      "ner_overall_f1": 0.598,
+      "ner_precision": 0.5701,
+      "ner_recall": 0.6289,
+      "ner_per_tag": {
+        "DRUG": {
+          "f1": 0.8615,
+          "support": 31
+        },
+        "ADR": {
+          "f1": 0.5455,
+          "support": 62
+        },
+        "SEVERITY": {
+          "f1": 0.0,
+          "support": 1,
+          "f1_note": "noisy (n<10)"
+        },
+        "PATIENT_DEMO": {
+          "f1": 0.0,
+          "support": 3,
+          "f1_note": "noisy (n<10)"
+        }
+      }
+    },
+    "cohort_study": {
+      "clf_precision": 0.7895,
+      "clf_recall": 0.7627,
+      "clf_f1": 0.7759,
+      "ner_overall_f1": 0.7846,
+      "ner_precision": 0.7939,
+      "ner_recall": 0.7754,
+      "ner_per_tag": {
+        "DRUG": {
+          "f1": 0.8233,
+          "support": 251
+        },
+        "ADR": {
+          "f1": 0.884,
+          "support": 177
+        },
+        "SEVERITY": {
+          "f1": 0.2105,
+          "support": 7,
+          "f1_note": "noisy (n<10)"
+        },
+        "PATIENT_DEMO": {
+          "f1": 0.1538,
+          "support": 37
+        }
+      }
+    },
+    "fda_newsletter": {
+      "clf_precision": 0.9333,
+      "clf_recall": 0.5185,
+      "clf_f1": 0.6667,
+      "ner_overall_f1": 0.5865,
+      "ner_precision": 0.5244,
+      "ner_recall": 0.6655,
+      "ner_per_tag": {
+        "DRUG": {
+          "f1": 0.626,
+          "support": 174
+        },
+        "ADR": {
+          "f1": 0.6344,
+          "support": 70
+        },
+        "SEVERITY": {
+          "f1": 0.2286,
+          "support": 8,
+          "f1_note": "noisy (n<10)"
+        },
+        "PATIENT_DEMO": {
+          "f1": 0.1538,
+          "support": 23
+        }
+      }
+    },
+    "qualitative_interview": {
+      "clf_precision": 0.5294,
+      "clf_recall": 0.9,
+      "clf_f1": 0.6667,
+      "ner_overall_f1": 0.6504,
+      "ner_precision": 0.597,
+      "ner_recall": 0.7143,
+      "ner_per_tag": {
+        "DRUG": {
+          "f1": 0.56,
+          "support": 18
+        },
+        "ADR": {
+          "f1": 0.8621,
+          "support": 59
+        },
+        "SEVERITY": {
+          "f1": 0.5,
+          "support": 4,
+          "f1_note": "noisy (n<10)"
+        },
+        "PATIENT_DEMO": {
+          "f1": 0.375,
+          "support": 31
+        }
+      }
+    }
+  },
+  "macro_clf": 0.724,
+  "macro_ner": 0.6549,
+  "phase6_standalone": {
+    "macro_clf": 0.71,
+    "macro_ner": 0.6507
+  },
+  "phase7_standalone": {
+    "macro_clf": 0.6655,
+    "macro_ner": 0.655
+  }
+}

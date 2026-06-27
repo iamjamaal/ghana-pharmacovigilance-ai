@@ -1,0 +1,457 @@
+[
+  {
+    "term": "oculogyric crisis",
+    "category": "clinical",
+    "meddra_pt": "Oculogyric crisis"
+  },
+  {
+    "term": "Stevens-Johnson syndrome",
+    "category": "clinical",
+    "meddra_pt": "Stevens-Johnson syndrome"
+  },
+  {
+    "term": "hepatotoxicity",
+    "category": "clinical",
+    "meddra_pt": "Hepatotoxicity"
+  },
+  {
+    "term": "nephrotoxicity",
+    "category": "clinical",
+    "meddra_pt": "Nephrotoxicity"
+  },
+  {
+    "term": "agranulocytosis",
+    "category": "clinical",
+    "meddra_pt": "Agranulocytosis"
+  },
+  {
+    "term": "anaemia",
+    "category": "clinical",
+    "meddra_pt": "Anaemia"
+  },
+  {
+    "term": "anemia",
+    "category": "clinical",
+    "meddra_pt": "Anaemia"
+  },
+  {
+    "term": "thrombocytopenia",
+    "category": "clinical",
+    "meddra_pt": "Thrombocytopenia"
+  },
+  {
+    "term": "peripheral neuropathy",
+    "category": "clinical",
+    "meddra_pt": "Peripheral neuropathy"
+  },
+  {
+    "term": "lactic acidosis",
+    "category": "clinical",
+    "meddra_pt": "Lactic acidosis"
+  },
+  {
+    "term": "lipodystrophy",
+    "category": "clinical",
+    "meddra_pt": "Lipodystrophy"
+  },
+  {
+    "term": "drug-induced hepatitis",
+    "category": "clinical",
+    "meddra_pt": "Drug-induced liver injury"
+  },
+  {
+    "term": "jaundice",
+    "category": "clinical",
+    "meddra_pt": "Jaundice"
+  },
+  {
+    "term": "nausea",
+    "category": "clinical",
+    "meddra_pt": "Nausea"
+  },
+  {
+    "term": "vomiting",
+    "category": "clinical",
+    "meddra_pt": "Vomiting"
+  },
+  {
+    "term": "pruritus",
+    "category": "clinical",
+    "meddra_pt": "Pruritus"
+  },
+  {
+    "term": "urticaria",
+    "category": "clinical",
+    "meddra_pt": "Urticaria"
+  },
+  {
+    "term": "hypersensitivity",
+    "category": "clinical",
+    "meddra_pt": "Hypersensitivity"
+  },
+  {
+    "term": "anaphylaxis",
+    "category": "clinical",
+    "meddra_pt": "Anaphylactic reaction"
+  },
+  {
+    "term": "anaphylactic reaction",
+    "category": "clinical",
+    "meddra_pt": "Anaphylactic reaction"
+  },
+  {
+    "term": "rhabdomyolysis",
+    "category": "clinical",
+    "meddra_pt": "Rhabdomyolysis"
+  },
+  {
+    "term": "QT prolongation",
+    "category": "clinical",
+    "meddra_pt": "Long QT syndrome"
+  },
+  {
+    "term": "neutropenia",
+    "category": "clinical",
+    "meddra_pt": "Neutropenia"
+  },
+  {
+    "term": "leukopenia",
+    "category": "clinical",
+    "meddra_pt": "Leukopenia"
+  },
+  {
+    "term": "pancytopenia",
+    "category": "clinical",
+    "meddra_pt": "Pancytopenia"
+  },
+  {
+    "term": "hypoglycaemia",
+    "category": "clinical",
+    "meddra_pt": "Hypoglycaemia"
+  },
+  {
+    "term": "hypoglycemia",
+    "category": "clinical",
+    "meddra_pt": "Hypoglycaemia"
+  },
+  {
+    "term": "hyperglycaemia",
+    "category": "clinical",
+    "meddra_pt": "Hyperglycaemia"
+  },
+  {
+    "term": "renal failure",
+    "category": "clinical",
+    "meddra_pt": "Renal failure"
+  },
+  {
+    "term": "acute kidney injury",
+    "category": "clinical",
+    "meddra_pt": "Acute kidney injury"
+  },
+  {
+    "term": "liver failure",
+    "category": "clinical",
+    "meddra_pt": "Hepatic failure"
+  },
+  {
+    "term": "hepatic failure",
+    "category": "clinical",
+    "meddra_pt": "Hepatic failure"
+  },
+  {
+    "term": "body weakness",
+    "category": "colloquial",
+    "meddra_pt": "Asthenia"
+  },
+  {
+    "term": "dizziness",
+    "category": "colloquial",
+    "meddra_pt": "Dizziness"
+  },
+  {
+    "term": "headache",
+    "category": "colloquial",
+    "meddra_pt": "Headache"
+  },
+  {
+    "term": "rash",
+    "category": "colloquial",
+    "meddra_pt": "Rash"
+  },
+  {
+    "term": "itching",
+    "category": "colloquial",
+    "meddra_pt": "Pruritus"
+  },
+  {
+    "term": "swollen testes",
+    "category": "colloquial",
+    "meddra_pt": "Scrotal oedema"
+  },
+  {
+    "term": "abdominal pain",
+    "category": "colloquial",
+    "meddra_pt": "Abdominal pain"
+  },
+  {
+    "term": "shivering",
+    "category": "colloquial",
+    "meddra_pt": "Chills"
+  },
+  {
+    "term": "palpitation",
+    "category": "colloquial",
+    "meddra_pt": "Palpitations"
+  },
+  {
+    "term": "palpitations",
+    "category": "colloquial",
+    "meddra_pt": "Palpitations"
+  },
+  {
+    "term": "sleepless nights",
+    "category": "colloquial",
+    "meddra_pt": "Insomnia"
+  },
+  {
+    "term": "body discomfort",
+    "category": "colloquial",
+    "meddra_pt": "Malaise"
+  },
+  {
+    "term": "cold peripheries",
+    "category": "colloquial",
+    "meddra_pt": "Peripheral coldness"
+  },
+  {
+    "term": "sudden collapse",
+    "category": "colloquial",
+    "meddra_pt": "Syncope"
+  },
+  {
+    "term": "restlessness",
+    "category": "colloquial",
+    "meddra_pt": "Agitation"
+  },
+  {
+    "term": "sweating",
+    "category": "colloquial",
+    "meddra_pt": "Hyperhidrosis"
+  },
+  {
+    "term": "double vision",
+    "category": "colloquial",
+    "meddra_pt": "Diplopia"
+  },
+  {
+    "term": "scrotal pain",
+    "category": "colloquial",
+    "meddra_pt": "Scrotal pain"
+  },
+  {
+    "term": "dry throat",
+    "category": "colloquial",
+    "meddra_pt": "Throat dryness"
+  },
+  {
+    "term": "gait disturbance",
+    "category": "colloquial",
+    "meddra_pt": "Gait disturbance"
+  },
+  {
+    "term": "tachycardia",
+    "category": "clinical",
+    "meddra_pt": "Tachycardia"
+  },
+  {
+    "term": "bradycardia",
+    "category": "clinical",
+    "meddra_pt": "Bradycardia"
+  },
+  {
+    "term": "hypotension",
+    "category": "clinical",
+    "meddra_pt": "Hypotension"
+  },
+  {
+    "term": "arrhythmia",
+    "category": "clinical",
+    "meddra_pt": "Arrhythmia"
+  },
+  {
+    "term": "cardiac arrest",
+    "category": "clinical",
+    "meddra_pt": "Cardiac arrest"
+  },
+  {
+    "term": "heart failure",
+    "category": "clinical",
+    "meddra_pt": "Cardiac failure"
+  },
+  {
+    "term": "respiratory failure",
+    "category": "clinical",
+    "meddra_pt": "Respiratory failure"
+  },
+  {
+    "term": "hypovolemic shock",
+    "category": "clinical",
+    "meddra_pt": "Hypovolaemic shock"
+  },
+  {
+    "term": "anaphylactic shock",
+    "category": "clinical",
+    "meddra_pt": "Anaphylactic shock"
+  },
+  {
+    "term": "toxic epidermal necrolysis",
+    "category": "clinical",
+    "meddra_pt": "Toxic epidermal necrolysis"
+  },
+  {
+    "term": "aplastic anaemia",
+    "category": "clinical",
+    "meddra_pt": "Aplastic anaemia"
+  },
+  {
+    "term": "retinopathy",
+    "category": "clinical",
+    "meddra_pt": "Retinopathy"
+  },
+  {
+    "term": "myopathy",
+    "category": "clinical",
+    "meddra_pt": "Myopathy"
+  },
+  {
+    "term": "dyspnoea",
+    "category": "clinical",
+    "meddra_pt": "Dyspnoea"
+  },
+  {
+    "term": "dyspnea",
+    "category": "clinical",
+    "meddra_pt": "Dyspnoea"
+  },
+  {
+    "term": "fatigue",
+    "category": "colloquial",
+    "meddra_pt": "Fatigue"
+  },
+  {
+    "term": "insomnia",
+    "category": "colloquial",
+    "meddra_pt": "Insomnia"
+  },
+  {
+    "term": "high fever",
+    "category": "colloquial",
+    "meddra_pt": "Pyrexia"
+  },
+  {
+    "term": "pyrexia",
+    "category": "clinical",
+    "meddra_pt": "Pyrexia"
+  },
+  {
+    "term": "myalgia",
+    "category": "clinical",
+    "meddra_pt": "Myalgia"
+  },
+  {
+    "term": "arthralgia",
+    "category": "clinical",
+    "meddra_pt": "Arthralgia"
+  },
+  {
+    "term": "yaw",
+    "category": "twi",
+    "meddra_pt": "Pain"
+  },
+  {
+    "term": "ahoma",
+    "category": "twi",
+    "meddra_pt": "Pyrexia"
+  },
+  {
+    "term": "ayamtuo",
+    "category": "twi",
+    "meddra_pt": "Abdominal pain"
+  },
+  {
+    "term": "ahome",
+    "category": "twi",
+    "meddra_pt": "Dizziness"
+  },
+  {
+    "term": "yellow fever",
+    "category": "newsletter",
+    "meddra_pt": "Vaccination complication"
+  },
+  {
+    "term": "measles rubella",
+    "category": "newsletter",
+    "meddra_pt": "Vaccination complication"
+  },
+  {
+    "term": "birth defects",
+    "category": "newsletter",
+    "meddra_pt": "Congenital anomaly"
+  },
+  {
+    "term": "lower limb amputation",
+    "category": "newsletter",
+    "meddra_pt": "Amputation"
+  },
+  {
+    "term": "tenderness",
+    "category": "newsletter",
+    "meddra_pt": "Pain"
+  },
+  {
+    "term": "redness",
+    "category": "newsletter",
+    "meddra_pt": "Erythema"
+  },
+  {
+    "term": "swelling of the genitals",
+    "category": "newsletter",
+    "meddra_pt": "Genital oedema"
+  },
+  {
+    "term": "fever",
+    "category": "newsletter",
+    "meddra_pt": "Pyrexia"
+  },
+  {
+    "term": "general feeling of being unwell",
+    "category": "newsletter",
+    "meddra_pt": "Malaise"
+  },
+  {
+    "term": "cord infection",
+    "category": "newsletter",
+    "meddra_pt": "Umbilical cord infection"
+  },
+  {
+    "term": "laceration",
+    "category": "newsletter",
+    "meddra_pt": "Laceration"
+  },
+  {
+    "term": "haemorrhage",
+    "category": "newsletter",
+    "meddra_pt": "Haemorrhage"
+  },
+  {
+    "term": "gastrointestinal side effects",
+    "category": "newsletter",
+    "meddra_pt": "Gastrointestinal disorder"
+  },
+  {
+    "term": "constipation",
+    "category": "newsletter",
+    "meddra_pt": "Constipation"
+  }
+]

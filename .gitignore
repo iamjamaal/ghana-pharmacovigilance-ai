@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Model weights — stored on HuggingFace Hub
+# Production checkpoints: https://huggingface.co/[to-be-set]
+models/
+reports/loso/models_*/
+
+# DAPT training corpus — reproducible via scripts/assemble_dapt_corpus.py
+corpora/
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# Impeccable tool artifacts
+.impeccable/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs (keep summary MDs, exclude raw training logs)
+reports/loso/*.log
+
+# Early training artifacts (superseded by main scripts/)
+output/gold/ghana-adr-training/
+
+# Temporary files
+*.tmp
+*.temp

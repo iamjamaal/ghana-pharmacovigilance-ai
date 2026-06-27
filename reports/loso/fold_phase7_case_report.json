@@ -1,0 +1,41 @@
+{
+  "held_out_source": "case_report",
+  "silver_mode": "Phase7: CLF=gold+aug+synthetic NER=gold+aug+silver",
+  "n_synthetic_clf": 754,
+  "n_total": 44,
+  "n_positive": 25,
+  "pct_positive": 56.8,
+  "clf_train_rows": 1080,
+  "ner_train_rows": 676,
+  "ner_silver_rows": 287,
+  "phase6_clf_f1": 0.746,
+  "phase6_ner_f1": 0.607,
+  "clf_delta_vs_phase6": -0.0187,
+  "ner_delta_vs_phase6": -0.009,
+  "clf_precision": 0.6667,
+  "clf_recall": 0.8,
+  "clf_f1": 0.7273,
+  "ner_overall_f1": 0.598,
+  "ner_precision": 0.5701,
+  "ner_recall": 0.6289,
+  "ner_per_tag": {
+    "DRUG": {
+      "f1": 0.8615,
+      "support": 31
+    },
+    "ADR": {
+      "f1": 0.5455,
+      "support": 62
+    },
+    "SEVERITY": {
+      "f1": 0.0,
+      "support": 1,
+      "f1_note": "noisy (n<10)"
+    },
+    "PATIENT_DEMO": {
+      "f1": 0.0,
+      "support": 3,
+      "f1_note": "noisy (n<10)"
+    }
+  }
+}

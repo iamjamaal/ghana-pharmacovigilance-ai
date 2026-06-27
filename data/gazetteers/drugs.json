@@ -1,0 +1,332 @@
+[
+  {
+    "canonical": "artesunate-amodiaquine",
+    "synonyms": ["ASAQ", "artesunate/amodiaquine", "AS-AQ", "Coarsucam", "Winthrop"],
+    "lay_terms": ["artesunate-amodiaquine", "artesunate-amodiaqiune", "artesunate-amodiaquine."],
+    "notes": "First-line Ghana antimalarial since 2004. Dominant drug in qualitative_interview source. 'artesunate-amodiaqiune' is a recurring patient/transcriber typo (5 occurrences in interview gold data)."
+  },
+  {
+    "canonical": "artemether-lumefantrine",
+    "synonyms": ["AL", "Coartem", "Riamet", "artemether/lumefantrine"],
+    "lay_terms": ["artemether-lumefantrine", "Artemether-lumefantrine"],
+    "notes": "Added as Ghana first-line ACT alternative for patients who cannot tolerate ASAQ."
+  },
+  {
+    "canonical": "dihydroartemisinin-piperaquine",
+    "synonyms": ["DHA-PPQ", "Eurartesim", "dihydroartemisinin/piperaquine", "DHAP"],
+    "lay_terms": ["dihydroartemisinin-piperaquine"],
+    "notes": "Third ACT option mentioned in interview source."
+  },
+  {
+    "canonical": "chloroquine",
+    "synonyms": ["CQ", "chloroquine phosphate", "chloroquine sulfate", "Aralen", "Nivaquine"],
+    "lay_terms": [],
+    "notes": "Ghana first-line antimalarial until 2004 when replaced by ASAQ due to resistance."
+  },
+  {
+    "canonical": "hydroxychloroquine",
+    "synonyms": ["HCQ", "Plaquenil", "hydroxychloroquine sulfate"],
+    "lay_terms": [],
+    "notes": "Antimalarial and immune-modulating drug; studied in COVID-19 context. Target drug in Phase 2."
+  },
+  {
+    "canonical": "artesunate",
+    "synonyms": ["AS", "artesunate sodium", "sodium artesunate", "Falcimon", "Arinate"],
+    "lay_terms": [],
+    "notes": "Standalone artesunate (distinct from artesunate-amodiaquine combination). Target drug in Phase 2."
+  },
+  {
+    "canonical": "amodiaquine",
+    "synonyms": ["AQ", "Camoquin", "amodiaquine hydrochloride", "amodiaquine dihydrochloride"],
+    "lay_terms": [],
+    "notes": "Standalone amodiaquine (distinct from ASAQ combination). Target drug in Phase 2."
+  },
+  {
+    "canonical": "sulfadoxine-pyrimethamine",
+    "synonyms": ["SP", "Fansidar", "sulfadoxine/pyrimethamine", "S-P"],
+    "lay_terms": [],
+    "notes": "Intermittent preventive treatment in pregnancy (IPTp) in Ghana."
+  },
+  {
+    "canonical": "zidovudine",
+    "synonyms": ["AZT", "ZDV", "Retrovir", "azidothymidine", "zidovudine/lamivudine", "Combivir"],
+    "lay_terms": [],
+    "notes": "First-line NRTI antiretroviral. Target drug in Phase 2."
+  },
+  {
+    "canonical": "lamivudine",
+    "synonyms": ["3TC", "Epivir", "lamivudine/zidovudine", "Epivir-HBV"],
+    "lay_terms": [],
+    "notes": "NRTI antiretroviral; also used for hepatitis B. Target drug in Phase 2."
+  },
+  {
+    "canonical": "lopinavir",
+    "synonyms": ["LPV", "LPV/r", "Kaletra", "lopinavir/ritonavir", "lopinavir-ritonavir"],
+    "lay_terms": [],
+    "notes": "Protease inhibitor typically co-formulated with ritonavir. Target drug in Phase 2."
+  },
+  {
+    "canonical": "ritonavir",
+    "synonyms": ["RTV", "Norvir", "lopinavir/ritonavir"],
+    "lay_terms": [],
+    "notes": "Protease inhibitor; used as pharmacokinetic booster with other PIs. Target drug in Phase 2."
+  },
+  {
+    "canonical": "tenofovir",
+    "synonyms": ["TDF", "Viread", "tenofovir disoproxil fumarate", "TDF/3TC", "tenofovir alafenamide", "TAF"],
+    "lay_terms": [],
+    "notes": "Nucleotide NRTI antiretroviral; first-line HIV treatment."
+  },
+  {
+    "canonical": "nevirapine",
+    "synonyms": ["NVP", "Viramune", "nevirapine extended release"],
+    "lay_terms": [],
+    "notes": "NNRTI antiretroviral; historically used in Ghana first-line regimens."
+  },
+  {
+    "canonical": "efavirenz",
+    "synonyms": ["EFV", "Sustiva", "Stocrin", "efavirenz/emtricitabine/tenofovir", "Atripla"],
+    "lay_terms": [],
+    "notes": "NNRTI antiretroviral; backbone of many Ghana first-line regimens."
+  },
+  {
+    "canonical": "atazanavir",
+    "synonyms": ["ATV", "Reyataz", "atazanavir/ritonavir", "ATV/r"],
+    "lay_terms": [],
+    "notes": "Protease inhibitor antiretroviral."
+  },
+  {
+    "canonical": "doxycycline",
+    "synonyms": ["doxycycline hyclate", "doxycycline monohydrate", "Vibramycin", "Doryx"],
+    "lay_terms": [],
+    "notes": "Broad-spectrum antibiotic; used for malaria prophylaxis and bacterial infections. Target drug in Phase 2."
+  },
+  {
+    "canonical": "amoxicillin",
+    "synonyms": ["Amoxil", "amoxicillin trihydrate", "amoxicillin/clavulanate", "Augmentin", "co-amoxiclav"],
+    "lay_terms": [],
+    "notes": "First-line penicillin antibiotic. Target drug in Phase 2."
+  },
+  {
+    "canonical": "ceftriaxone",
+    "synonyms": ["Rocephin", "ceftriaxone sodium", "ceftriaxone disodium"],
+    "lay_terms": [],
+    "notes": "Third-generation cephalosporin antibiotic. Target drug in Phase 2."
+  },
+  {
+    "canonical": "ciprofloxacin",
+    "synonyms": ["Cipro", "ciprofloxacin hydrochloride", "Ciprolet"],
+    "lay_terms": [],
+    "notes": "Fluoroquinolone antibiotic; broad-spectrum."
+  },
+  {
+    "canonical": "metronidazole",
+    "synonyms": ["Flagyl", "metronidazole benzoate", "Metrogyl"],
+    "lay_terms": [],
+    "notes": "Antiprotozoal and antibiotic; used for anaerobic infections."
+  },
+  {
+    "canonical": "paracetamol",
+    "synonyms": ["acetaminophen", "Tylenol", "Panadol", "APAP", "paracetamol/codeine"],
+    "lay_terms": [],
+    "notes": "Analgesic and antipyretic; most commonly used OTC drug in Ghana. Target drug in Phase 2."
+  },
+  {
+    "canonical": "ibuprofen",
+    "synonyms": ["Advil", "Brufen", "Nurofen", "ibuprofen lysine"],
+    "lay_terms": [],
+    "notes": "NSAID analgesic and antipyretic."
+  },
+  {
+    "canonical": "diclofenac",
+    "synonyms": ["Voltaren", "diclofenac sodium", "diclofenac potassium", "Cataflam"],
+    "lay_terms": [],
+    "notes": "NSAID analgesic; available in oral and topical forms."
+  },
+  {
+    "canonical": "tramadol",
+    "synonyms": ["Ultram", "tramadol hydrochloride", "Tramal"],
+    "lay_terms": [],
+    "notes": "Opioid analgesic; significant misuse documented in Ghana."
+  },
+  {
+    "canonical": "hyoscine butylbromide",
+    "synonyms": ["Buscopan", "scopolamine butylbromide", "hyoscine-N-butylbromide"],
+    "lay_terms": [],
+    "notes": "Antispasmodic for abdominal and GI cramps. Target drug in Phase 2."
+  },
+  {
+    "canonical": "omeprazole",
+    "synonyms": ["Prilosec", "Losec", "omeprazole magnesium"],
+    "lay_terms": [],
+    "notes": "Proton pump inhibitor; used for peptic ulcer disease."
+  },
+  {
+    "canonical": "ranitidine",
+    "synonyms": ["Zantac", "ranitidine hydrochloride"],
+    "lay_terms": [],
+    "notes": "H2 receptor antagonist; withdrawn in many markets due to NDMA contamination."
+  },
+  {
+    "canonical": "isoniazid",
+    "synonyms": ["INH", "isonicotinylhydrazide", "Nydrazid", "isoniazid/rifampicin"],
+    "lay_terms": [],
+    "notes": "First-line tuberculosis antibiotic."
+  },
+  {
+    "canonical": "rifampicin",
+    "synonyms": ["RIF", "rifampin", "Rifadin", "Rimactane", "rifampicin/isoniazid"],
+    "lay_terms": [],
+    "notes": "First-line tuberculosis antibiotic."
+  },
+  {
+    "canonical": "pyrazinamide",
+    "synonyms": ["PZA", "Zinamide"],
+    "lay_terms": [],
+    "notes": "First-line tuberculosis antibiotic."
+  },
+  {
+    "canonical": "ethambutol",
+    "synonyms": ["EMB", "Myambutol", "ethambutol hydrochloride"],
+    "lay_terms": [],
+    "notes": "First-line tuberculosis antibiotic."
+  },
+  {
+    "canonical": "streptomycin",
+    "synonyms": ["SM", "streptomycin sulfate"],
+    "lay_terms": [],
+    "notes": "Aminoglycoside antibiotic; second-line TB."
+  },
+  {
+    "canonical": "nifedipine",
+    "synonyms": ["Procardia", "Adalat", "nifedipine extended release"],
+    "lay_terms": [],
+    "notes": "Calcium channel blocker antihypertensive."
+  },
+  {
+    "canonical": "amlodipine",
+    "synonyms": ["Norvasc", "amlodipine besylate"],
+    "lay_terms": [],
+    "notes": "Calcium channel blocker antihypertensive."
+  },
+  {
+    "canonical": "lisinopril",
+    "synonyms": ["Prinivil", "Zestril", "lisinopril dihydrate"],
+    "lay_terms": [],
+    "notes": "ACE inhibitor antihypertensive."
+  },
+  {
+    "canonical": "enalapril",
+    "synonyms": ["Vasotec", "enalapril maleate", "enalaprilat"],
+    "lay_terms": [],
+    "notes": "ACE inhibitor antihypertensive."
+  },
+  {
+    "canonical": "atenolol",
+    "synonyms": ["Tenormin"],
+    "lay_terms": [],
+    "notes": "Beta-blocker antihypertensive."
+  },
+  {
+    "canonical": "metformin",
+    "synonyms": ["Glucophage", "metformin hydrochloride", "metformin extended release"],
+    "lay_terms": [],
+    "notes": "First-line antidiabetic."
+  },
+  {
+    "canonical": "glibenclamide",
+    "synonyms": ["glyburide", "Daonil", "Euglucon"],
+    "lay_terms": [],
+    "notes": "Sulfonylurea antidiabetic."
+  },
+  {
+    "canonical": "praziquantel",
+    "synonyms": ["Biltricide"],
+    "lay_terms": [],
+    "notes": "Anthelmintic for schistosomiasis."
+  },
+  {
+    "canonical": "ivermectin",
+    "synonyms": ["Mectizan", "Stromectol"],
+    "lay_terms": [],
+    "notes": "Antiparasitic; used for onchocerciasis mass drug administration in Ghana."
+  },
+  {
+    "canonical": "albendazole",
+    "synonyms": ["Zentel", "albendazole sulfoxide"],
+    "lay_terms": [],
+    "notes": "Antiparasitic anthelmintic."
+  },
+  {
+    "canonical": "oxytocin",
+    "synonyms": ["Pitocin", "Syntocinon"],
+    "lay_terms": [],
+    "notes": "Uterotonic used in labour and postpartum haemorrhage."
+  },
+  {
+    "canonical": "misoprostol",
+    "synonyms": ["Cytotec", "misoprostol/mifepristone"],
+    "lay_terms": [],
+    "notes": "Prostaglandin for cervical ripening and postpartum haemorrhage."
+  },
+  {
+    "canonical": "ergometrine",
+    "synonyms": ["ergonovine", "Ergotrate", "methylergometrine", "methylergonovine"],
+    "lay_terms": [],
+    "notes": "Ergot alkaloid uterotonic."
+  },
+  {
+    "canonical": "diazepam",
+    "synonyms": ["Valium", "diazepam rectal", "Stesolid"],
+    "lay_terms": [],
+    "notes": "Benzodiazepine; used for seizures and anxiety."
+  },
+  {
+    "canonical": "phenobarbital",
+    "synonyms": ["phenobarbitone", "Luminal", "phenobarb"],
+    "lay_terms": [],
+    "notes": "Barbiturate anticonvulsant; widely used for epilepsy in low-resource settings."
+  },
+  {
+    "canonical": "carbamazepine",
+    "synonyms": ["Tegretol", "carbamazepine extended release", "Carbatrol"],
+    "lay_terms": [],
+    "notes": "Anticonvulsant for epilepsy and trigeminal neuralgia."
+  },
+  {
+    "canonical": "phenytoin",
+    "synonyms": ["Dilantin", "phenytoin sodium", "fosphenytoin"],
+    "lay_terms": [],
+    "notes": "Anticonvulsant."
+  },
+  {
+    "canonical": "AstraZeneca COVID-19 vaccine",
+    "synonyms": ["AstraZeneca", "Vaxzevria", "ChAdOx1-S", "ChAdOx1 nCoV-19", "Covishield", "AZ vaccine"],
+    "lay_terms": [],
+    "notes": "Adenoviral vector COVID-19 vaccine. Target drug in Phase 2. Not FDA-approved; DailyMed will return no results."
+  },
+  {
+    "canonical": "Pfizer-BioNTech COVID-19 vaccine",
+    "synonyms": ["Pfizer-BioNTech", "Comirnaty", "BNT162b2", "Pfizer vaccine"],
+    "lay_terms": [],
+    "notes": "mRNA COVID-19 vaccine."
+  },
+  {
+    "canonical": "Johnson & Johnson COVID-19 vaccine",
+    "synonyms": ["Johnson & Johnson", "Janssen", "Ad26.COV2.S", "Janssen vaccine"],
+    "lay_terms": [],
+    "notes": "Adenoviral vector COVID-19 vaccine."
+  },
+  {
+    "canonical": "Sputnik V",
+    "synonyms": ["Gam-COVID-Vac", "Sputnik Light", "Gamaleya vaccine"],
+    "lay_terms": [],
+    "notes": "Russian adenoviral vector COVID-19 vaccine. Target drug in Phase 2. Not FDA/EMA-approved; DailyMed will return no results."
+  },
+  {
+    "canonical": "co-trimoxazole",
+    "synonyms": ["cotrimoxazole", "sulfamethoxazole-trimethoprim", "trimethoprim-sulfamethoxazole", "TMP-SMX", "SMX-TMP", "Bactrim", "Septrin", "Co-trimoxazole"],
+    "lay_terms": ["co-trimoxazole", "Co-trimoxazole"],
+    "notes": "Antibiotic combination (sulfamethoxazole + trimethoprim); widely used in Ghana for opportunistic infection prophylaxis in HIV patients and UTIs. Hyphenated prefix 'Co-' causes NER fragmentation fixed in inference_engine_v2."
+  }
+]

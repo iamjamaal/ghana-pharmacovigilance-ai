@@ -1,0 +1,39 @@
+{
+  "held_out_source": "fda_newsletter",
+  "silver_mode": "NER only (gold+aug+silver NER, gold+aug CLF)",
+  "n_total": 99,
+  "n_positive": 27,
+  "pct_positive": 27.3,
+  "clf_train_rows": 279,
+  "ner_train_rows": 703,
+  "ner_silver_rows": 287,
+  "v1aug_clf_f1": 0.605,
+  "v1aug_ner_f1": 0.494,
+  "clf_delta_vs_v1aug": 0.0617,
+  "ner_delta_vs_v1aug": 0.0696,
+  "clf_precision": 0.9333,
+  "clf_recall": 0.5185,
+  "clf_f1": 0.6667,
+  "ner_overall_f1": 0.5636,
+  "ner_precision": 0.4868,
+  "ner_recall": 0.6691,
+  "ner_per_tag": {
+    "DRUG": {
+      "f1": 0.6158,
+      "support": 174
+    },
+    "ADR": {
+      "f1": 0.5859,
+      "support": 70
+    },
+    "SEVERITY": {
+      "f1": 0.2286,
+      "support": 8,
+      "f1_note": "noisy (n<10)"
+    },
+    "PATIENT_DEMO": {
+      "f1": 0.0741,
+      "support": 23
+    }
+  }
+}

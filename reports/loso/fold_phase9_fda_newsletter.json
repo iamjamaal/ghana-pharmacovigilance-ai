@@ -1,0 +1,47 @@
+{
+  "held_out_source": "fda_newsletter",
+  "silver_mode": "Phase9: CLF=gold+aug+syn_ph7+syn_ph8+syn_ph8b+openfda+syn_ph9 NER=gold+aug+silver",
+  "n_synthetic_clf": 1939,
+  "n_synthetic_by_tag": {
+    "synthetic_phase7": 754,
+    "synthetic_phase8": 359,
+    "synthetic_phase8b": 302,
+    "openfda_harvest": 329,
+    "synthetic_phase9": 195
+  },
+  "n_total": 99,
+  "n_positive": 27,
+  "pct_positive": 27.3,
+  "clf_train_rows": 2218,
+  "ner_train_rows": 703,
+  "ner_silver_rows": 287,
+  "phase7_clf_f1": 0.7059,
+  "phase7_ner_f1": 0.5795,
+  "clf_delta_vs_phase7": 0.0577,
+  "ner_delta_vs_phase7": -0.0003,
+  "clf_precision": 0.75,
+  "clf_recall": 0.7778,
+  "clf_f1": 0.7636,
+  "ner_overall_f1": 0.5792,
+  "ner_precision": 0.5171,
+  "ner_recall": 0.6582,
+  "ner_per_tag": {
+    "DRUG": {
+      "f1": 0.6121,
+      "support": 174
+    },
+    "ADR": {
+      "f1": 0.6162,
+      "support": 70
+    },
+    "SEVERITY": {
+      "f1": 0.2353,
+      "support": 8,
+      "f1_note": "noisy (n<10)"
+    },
+    "PATIENT_DEMO": {
+      "f1": 0.2963,
+      "support": 23
+    }
+  }
+}

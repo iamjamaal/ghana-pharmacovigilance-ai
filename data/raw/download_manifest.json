@@ -1,0 +1,21 @@
+{
+  "success": [
+    "druglens_03",
+    "druglens_05",
+    "druglens_07",
+    "druglens_09",
+    "druglens_10",
+    "fda_annual_2023",
+    "fda_adr_guide_2025",
+    "coartem_oculogyric",
+    "naphthalene_aki",
+    "art_adr_korlebu",
+    "covid_stimulated_adr",
+    "patient_adr_interviews",
+    "act_reporting_northern",
+    "covid_vaccine_aefi",
+    "hiv_pep_korlebu",
+    "ho_underreporting"
+  ],
+  "failed": []
+}

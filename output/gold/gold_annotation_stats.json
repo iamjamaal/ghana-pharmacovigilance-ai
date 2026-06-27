@@ -1,0 +1,69 @@
+{
+  "total_sentences": 2870,
+  "manually_reviewed": 510,
+  "auto_annotated_only": 2360,
+  "adr_positive": 164,
+  "adr_positive_pct": 5.7,
+  "uncertain": 1,
+  "drug_mentions": 765,
+  "adr_mentions": 630,
+  "relations": 4202,
+  "gold_subset": {
+    "total": 510,
+    "adr_yes": 164,
+    "adr_no": 345,
+    "uncertain": 1
+  },
+  "by_source_type": {
+    "qualitative_interview": 611,
+    "cohort_study": 512,
+    "case_report": 116,
+    "fda_newsletter": 675,
+    "fda_guideline": 194,
+    "fda_annual_report": 387,
+    "surveillance_evaluation": 375
+  },
+  "reviewed_by_source": {
+    "qualitative_interview": 120,
+    "cohort_study": 161,
+    "case_report": 44,
+    "fda_newsletter": 99,
+    "fda_guideline": 27,
+    "fda_annual_report": 4,
+    "surveillance_evaluation": 55
+  },
+  "top_15_drugs": {
+    "azt": 55,
+    "3tc": 55,
+    "hydroxychloroquine": 52,
+    "chloroquine": 32,
+    "azithromycin": 29,
+    "astrazeneca": 27,
+    "zidovudine": 26,
+    "lpv-rtv": 26,
+    "moderna": 20,
+    "sputnik v": 20,
+    "lamivudine": 17,
+    "codeine": 16,
+    "artesunate-amodiaquine": 13,
+    "hyoscine butylbromide": 13,
+    "lopinavir": 12
+  },
+  "top_15_adrs": {
+    "dizziness": 23,
+    "headache": 23,
+    "anaemia": 23,
+    "nausea": 18,
+    "vomiting": 17,
+    "diarrhoea": 16,
+    "oculogyric crisis": 13,
+    "fatigue": 12,
+    "weakness": 11,
+    "poor vision": 10,
+    "abdominal pain": 10,
+    "restlessness": 10,
+    "fever": 9,
+    "loss of appetite": 8,
+    "dyspnoea": 8
+  }
+}

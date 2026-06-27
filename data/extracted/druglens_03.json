@@ -1,0 +1,11 @@
+{
+  "doc_id": "druglens_03",
+  "source_type": "fda_newsletter",
+  "year": 2015,
+  "origin": "Ghana FDA DrugLens Issue 3",
+  "license": "Ghana Government Publication",
+  "extraction_method": "pymupdf",
+  "total_pages": 0,
+  "pages": [],
+  "full_text": ""
+}
