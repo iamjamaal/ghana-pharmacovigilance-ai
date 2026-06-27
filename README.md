@@ -1,7 +1,7 @@
 # Ghana ADR Detection System
 
 > Automated adverse drug reaction detection from free-text clinical narratives —  
-> built on Ghanaian pharmacovigilance data for the **Ghana AI Innovation Challenge 2026**.
+> built on Ghanaian pharmacovigilance data.
 
 [![Phase 7 Hybrid](https://img.shields.io/badge/CLF%20F1-0.724-green)](reports/loso/summary_phase7.md)
 [![NER F1](https://img.shields.io/badge/NER%20F1-0.655-green)](reports/loso/summary_phase7.md)
@@ -12,7 +12,7 @@
 
 ## What It Does
 
-The Ghana ADR Detection System takes a free-text clinical sentence — from a case report, patient interview, FDA newsletter, or ward note — and:
+The Ghana ADR Detection System takes a free-text clinical sentence from a case report, patient interview, FDA newsletter, or ward note  and:
 
 1. **Classifies** it as ADR / Non-ADR (binary, calibrated confidence score)
 2. **Extracts** named entities: `DRUG`, `ADR`, `SEVERITY`, `PATIENT_DEMO`
@@ -22,9 +22,9 @@ It supports single-sentence analysis, batch CSV/TXT upload, and a Yellow Card–
 
 ---
 
-## Performance (Phase 7 Hybrid — LOSO)
+## Performance (LOSO)
 
-> **Evaluation methodology:** Leave-One-Source-Out (LOSO) — each source domain is held out as the test set while the model trains on the remaining three. This is stricter than random splitting and measures real cross-domain generalisation.
+> **Evaluation methodology:** Leave-One-Source-Out (LOSO): Each source domain is held out as the test set while the model trains on the remaining three. This is stricter than random splitting and measures real cross-domain generalisation.
 
 | Source | N | CLF F1 | NER F1 | DRUG | ADR |
 |---|---|---|---|---|---|
@@ -65,7 +65,7 @@ Built entirely from Ghanaian pharmacovigilance sources:
 | PMC open-access case reports & cohort studies (9 articles) | JATS XML | — |
 | Patient ADR interview transcripts | Qualitative | — |
 | **Total gold dataset** | — | **2,870 sentences** |
-| Manually reviewed | — | 510 (17.8%) |
+
 
 Silver training data: 2,105+ additional records (DailyMed weak supervision, DrugLens NER annotations, OpenFDA ICSR records, synthetic curriculum examples).
 
@@ -73,52 +73,6 @@ All PMC articles and Ghana FDA publications are public government documents.
 
 ---
 
-## Repository Structure
-
-```
-ghana-adr-pipeline/
-├── scripts/
-│   ├── 01_download.py               # Download PDFs + PMC XML
-│   ├── 02_extract.py                # Extract text from all sources
-│   ├── 03_segment_annotate.py       # Sentence splitting + auto-annotation
-│   ├── 04_export.py                 # Export gold datasets
-│   ├── assemble_dapt_corpus.py      # Assemble DAPT pretraining corpus
-│   ├── run_dapt.py                  # Domain-adaptive pretraining
-│   ├── loso_phase2b_full.py         # Production CLF training (Phase 6)
-│   ├── loso_phase7.py               # Production NER training (Phase 7)
-│   ├── phase5_per_source_threshold.py  # Per-source CLF threshold sweep
-│   ├── phase7_hybrid_eval.py        # Production hybrid evaluation
-│   ├── harvest_newsletter_silver.py # DrugLens silver NER data
-│   ├── harvest_openfda_silver.py    # OpenFDA ICSR silver CLF data
-│   ├── generate_synthetic_phase*.py # Synthetic training curriculum
-│   └── batch_regression_phase9.py  # Final 95-case regression suite
-├── data/
-│   ├── raw/                         # Downloaded PDFs + PMC XML
-│   ├── extracted/                   # Extracted text JSON
-│   ├── annotated/                   # Auto-annotated JSONL
-│   ├── silver/                      # Silver + synthetic training data
-│   └── gazetteers/                  # Drug and ADR lexicons
-├── output/
-│   ├── gold/                        # Gold classification + NER datasets
-│   └── dataset_card.md
-├── reports/
-│   ├── loso/                        # Per-fold LOSO results (phases 2b, 7, 8, 9)
-│   ├── phase7_hybrid.json           # Production config results
-│   ├── phase5_per_source_threshold.json  # Production CLF thresholds
-│   ├── batch_regression_phase9.md   # Final 89.5% regression report
-│   └── final_evaluation.md          # Phase 2b vs DAPT comparison
-├── ghana-adr-demo/
-│   ├── app.py                       # Flask web application
-│   ├── inference_engine.py          # Inference + post-processing logic
-│   └── templates/index.html         # Demo UI
-├── src/
-│   ├── evaluation/loso.py           # LOSO evaluation utilities
-│   └── weak_supervision/            # Weak supervision (skweak-free fallback)
-├── models/                          # gitignored — see HuggingFace Hub
-├── config/sources.json
-├── requirements.txt
-└── run_pipeline.py
-```
 
 ---
 
