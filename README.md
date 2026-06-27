@@ -49,8 +49,8 @@ Batch regression against 95 curated hard cases (Pidgin idioms, dialect, regulato
 | Production config | **Phase 7 Hybrid**: Phase 6 CLF checkpoints + Phase 7 NER checkpoints |
 | Post-processing | Negation gates, INTOLERANCE patterns, Ghanaian synonym expansion, MedDRA normalisation, dechallenge/rechallenge detection |
 
-> **Model weights** are hosted on HuggingFace Hub: [to be linked after upload]  
-> **DAPT backbone** is hosted on HuggingFace Hub: [to be linked after upload]
+> **Model weights** are hosted on HuggingFace Hub: [iamjamaal/ghana-adr-detection](https://huggingface.co/iamjamaal/ghana-adr-detection)  
+> **DAPT backbone**: `dapt-backbone/` in the same repo
 
 ---
 
@@ -92,7 +92,8 @@ python run_pipeline.py --step 3 # Resume from step 3
 ```bash
 cd ghana-adr-demo
 pip install flask pandas transformers torch
-# Download model checkpoints from HuggingFace Hub (see above)
+# Download model checkpoints from HuggingFace Hub
+# huggingface-cli download iamjamaal/ghana-adr-detection --local-dir models/
 python app.py
 # Open http://localhost:5000
 ```
