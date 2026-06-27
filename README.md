@@ -69,7 +69,7 @@ Built entirely from Ghanaian pharmacovigilance sources:
 
 Silver training data: 2,105+ additional records (DailyMed weak supervision, DrugLens NER annotations, OpenFDA ICSR records, synthetic curriculum examples).
 
-All PMC articles are CC-BY licensed. Ghana FDA publications are public government documents.
+All PMC articles and Ghana FDA publications are public government documents.
 
 ---
 
