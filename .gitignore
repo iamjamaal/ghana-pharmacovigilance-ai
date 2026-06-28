@@ -44,3 +44,7 @@ output/gold/ghana-adr-training/
 # Temporary files
 *.tmp
 *.temp
+
+# Abstract documents (not part of codebase)
+abstract.docx
+abstract.pdf

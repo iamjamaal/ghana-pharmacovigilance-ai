@@ -243,10 +243,10 @@ tailwind.config = {
 
   <div class="mt-auto px-md py-md border-t border-outline-variant">
     <div class="flex justify-between text-body-sm mb-md px-xs">
-      <span class="text-on-surface-variant">Classifier F1</span><span class="font-semibold font-mono text-primary">0.784</span>
+      <span class="text-on-surface-variant">Classifier F1</span><span class="font-semibold font-mono text-primary">0.724</span>
     </div>
     <div class="flex justify-between text-body-sm mb-md px-xs">
-      <span class="text-on-surface-variant">NER F1</span><span class="font-semibold font-mono text-primary">0.746</span>
+      <span class="text-on-surface-variant">NER F1</span><span class="font-semibold font-mono text-primary">0.655</span>
     </div>
     <button onclick="openModal()" class="w-full py-sm bg-secondary text-on-secondary font-semibold rounded flex items-center justify-center gap-xs text-body-sm hover:bg-secondary-container transition-colors">
       <span class="material-symbols-outlined text-[18px]">report</span>Report ADR
@@ -478,24 +478,24 @@ tailwind.config = {
   <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden mb-lg">
     <div class="grid grid-cols-2 xl:grid-cols-4 divide-y xl:divide-y-0 xl:divide-x divide-outline-variant">
       <div class="px-lg py-md">
-        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">F1 SCORE</p>
-        <p class="text-display-lg font-bold text-on-background">0.784</p>
-        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">CASE REPORT</p>
+        <p class="text-display-lg font-bold text-on-background">0.787</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">CLF F1 (n=44)</p>
       </div>
       <div class="px-lg py-md">
-        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">PRECISION</p>
-        <p class="text-display-lg font-bold text-on-background">0.801</p>
-        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">COHORT STUDY</p>
+        <p class="text-display-lg font-bold text-on-background">0.776</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">CLF F1 (n=123)</p>
       </div>
       <div class="px-lg py-md">
-        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">RECALL</p>
-        <p class="text-display-lg font-bold text-on-background">0.768</p>
-        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">FDA NEWSLETTER</p>
+        <p class="text-display-lg font-bold text-on-background">0.667</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">CLF F1 (n=99)</p>
       </div>
       <div class="px-lg py-md">
-        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">AUC-ROC</p>
-        <p class="text-display-lg font-bold text-on-background">0.847</p>
-        <p class="text-body-sm text-on-surface-variant mt-xs">Classification</p>
+        <p class="text-label-caps font-label-caps text-on-surface-variant mb-xs">INTERVIEW</p>
+        <p class="text-display-lg font-bold text-on-background">0.667</p>
+        <p class="text-body-sm text-on-surface-variant mt-xs">CLF F1 (n=78)</p>
       </div>
     </div>
   </div>
@@ -516,38 +516,38 @@ tailwind.config = {
       <tbody class="divide-y divide-outline-variant">
         <tr>
           <td class="px-lg py-sm"><span class="entity-drug px-sm rounded font-semibold text-body-sm">DRUG</span></td>
-          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.891</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.912</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.871</td>
-          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#d97706] h-full rounded-full" style="width:89.1%"></div></div></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.718</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#d97706] h-full rounded-full" style="width:71.8%"></div></div></td>
         </tr>
         <tr>
           <td class="px-lg py-sm"><span class="entity-adr px-sm rounded font-semibold text-body-sm">ADR</span></td>
-          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.743</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.768</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.719</td>
-          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-secondary h-full rounded-full" style="width:74.3%"></div></div></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.727</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-secondary h-full rounded-full" style="width:72.7%"></div></div></td>
         </tr>
         <tr>
           <td class="px-lg py-sm"><span class="entity-severity px-sm rounded font-semibold text-body-sm">SEVERITY</span></td>
-          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.698</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.724</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.674</td>
-          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#ea580c] h-full rounded-full" style="width:69.8%"></div></div></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">—</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#ea580c] h-full rounded-full" style="width:0%"></div></div></td>
         </tr>
         <tr>
           <td class="px-lg py-sm"><span class="entity-patient px-sm rounded font-semibold text-body-sm">PATIENT_DEMO</span></td>
-          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.712</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.745</td>
-          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">0.682</td>
-          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#7c3aed] h-full rounded-full" style="width:71.2%"></div></div></td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">—</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm font-mono text-body-sm text-on-surface-variant">—</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-[#7c3aed] h-full rounded-full" style="width:0%"></div></div></td>
         </tr>
         <tr class="bg-surface-container-low">
           <td class="px-lg py-sm font-semibold text-primary text-body-sm">Overall NER</td>
-          <td class="px-lg py-sm font-mono font-bold text-primary text-body-sm">0.746</td>
-          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.787</td>
-          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">0.737</td>
-          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-primary h-full rounded-full" style="width:74.6%"></div></div></td>
+          <td class="px-lg py-sm font-mono font-bold text-primary text-body-sm">0.655</td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">—</td>
+          <td class="px-lg py-sm font-mono font-semibold text-primary text-body-sm">—</td>
+          <td class="px-lg py-sm"><div class="w-full bg-surface-container-high rounded-full h-2"><div class="bg-primary h-full rounded-full" style="width:65.5%"></div></div></td>
         </tr>
       </tbody>
     </table>
@@ -563,7 +563,7 @@ tailwind.config = {
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Fine-tuning</span><span class="font-semibold">Joint CLF + NER heads</span></div>
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Max Token Length</span><span class="font-semibold font-mono">256</span></div>
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Post-processing</span><span class="font-semibold">BIO correction + gazetteer</span></div>
-        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Negation Guard</span><span class="font-semibold text-green-700">&#10003; Active (8 patterns)</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Negation Guard</span><span class="font-semibold text-green-700">&#10003; Active (29 patterns)</span></div>
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Ghanaian Synonyms</span><span class="font-semibold text-green-700">&#10003; Active (20 phrases)</span></div>
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">MedDRA Normalisation</span><span class="font-semibold text-green-700">&#10003; Active (40 terms)</span></div>
       </div>
@@ -578,7 +578,7 @@ tailwind.config = {
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">ADR-positive rate</span><span class="font-semibold text-secondary">11.3% (323)</span></div>
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Drug entity mentions</span><span class="font-semibold font-mono">863</span></div>
         <div class="flex justify-between py-sm"><span class="text-on-surface-variant">ADR entity mentions</span><span class="font-semibold font-mono">561</span></div>
-        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Data sources</span><span class="font-semibold">16 Ghanaian sources</span></div>
+        <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Data sources</span><span class="font-semibold">4 Ghanaian source domains</span></div>
       </div>
     </div>
   </div>
@@ -591,7 +591,7 @@ tailwind.config = {
   <div class="mb-lg pb-lg border-b border-outline-variant flex flex-wrap items-end justify-between gap-md">
     <div>
       <h2 class="text-headline-md font-semibold text-on-background">Ghanaian Datasets</h2>
-      <p class="text-body-sm text-on-surface-variant mt-xs">16 pharmacovigilance and clinical sources used for training</p>
+      <p class="text-body-sm text-on-surface-variant mt-xs">4 Ghanaian pharmacovigilance source domains used for training</p>
     </div>
     <!-- Inline summary — no identical card grid -->
     <div class="flex items-center gap-lg">
@@ -606,7 +606,7 @@ tailwind.config = {
       </div>
       <div class="h-6 w-px bg-outline-variant"></div>
       <div class="flex items-baseline gap-xs">
-        <span class="text-headline-md font-bold text-primary">16</span>
+        <span class="text-headline-md font-bold text-primary">4</span>
         <span class="text-body-sm text-on-surface-variant">sources</span>
       </div>
     </div>
@@ -920,22 +920,10 @@ const ARCHIVE_DATA = [
 ];
 
 const DATASETS = [
-  { name:'Ghana FDA National Pharmacovigilance Centre', type:'ADR Reports',        records:412, period:'2015–2024', region:'National'      },
-  { name:'Korle Bu Teaching Hospital',                  type:'Clinical Records',   records:287, period:'2018–2024', region:'Greater Accra' },
-  { name:'Komfo Anokye Teaching Hospital',              type:'Pharmacovigilance',  records:231, period:'2017–2024', region:'Ashanti'       },
-  { name:'Tamale Teaching Hospital',                    type:'Clinical Notes',     records:156, period:'2019–2024', region:'Northern'      },
-  { name:'Ghana Medical Journal',                       type:'Case Reports',       records:198, period:'2010–2024', region:'National'      },
-  { name:'West African Journal of Medicine',            type:'Research Articles',  records:143, period:'2012–2024', region:'West Africa'   },
-  { name:'Journal of Medical & Biomedical Sci. (UDS)', type:'Research Articles',  records:89,  period:'2014–2024', region:'Upper East/West'},
-  { name:'Ghana Malaria Programme (NMCP)',              type:'Surveillance Data',  records:178, period:'2016–2024', region:'National'      },
-  { name:'NACP HIV/AIDS Treatment Records',             type:'Programme Data',     records:264, period:'2015–2024', region:'National'      },
-  { name:'NTLCP TB Programme Surveillance',             type:'Surveillance Data',  records:121, period:'2017–2024', region:'National'      },
-  { name:'NHIS Pharmacovigilance Reports',              type:'Claims Data',        records:203, period:'2019–2024', region:'National'      },
-  { name:'Kintampo Health Research Centre',             type:'Research Database',  records:97,  period:'2016–2024', region:'Bono East'     },
-  { name:'Noguchi Memorial Institute (NMIMR)',          type:'Clinical Research',  records:112, period:'2015–2024', region:'Greater Accra' },
-  { name:'University of Ghana Medical School',          type:'Academic Records',   records:134, period:'2014–2024', region:'Greater Accra' },
-  { name:'Cape Coast Teaching Hospital',                type:'Clinical Records',   records:98,  period:'2018–2024', region:'Central'       },
-  { name:'Community-Based Pharmacovigilance (CBP)',     type:'Community Reports',  records:143, period:'2020–2024', region:'National'      },
+  { name:'Ghana FDA DrugLens Newsletters (5 issues) + Annual Report 2023 + ADR Guide', type:'Regulatory documents', records:99, period:'2020–2024', region:'National'   },
+  { name:'PMC Open-Access Case Reports (9 articles)',                                   type:'Clinical case reports', records:44, period:'2010–2024', region:'West Africa' },
+  { name:'PMC Open-Access Cohort Studies (9 articles)',                                 type:'Cohort study articles', records:123, period:'2010–2024', region:'West Africa' },
+  { name:'Patient ADR Interview Transcripts',                                           type:'Qualitative interviews', records:78, period:'2023–2024', region:'National'   },
 ];
 
 // ── State ─────────────────────────────────────────────────────────────────────

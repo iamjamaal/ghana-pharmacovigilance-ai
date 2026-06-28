@@ -22,12 +22,12 @@ from transformers import (
 # ── MODEL CONFIG ─────────────────────────────────────────────────────────────
 _ROOT          = Path(__file__).parent.parent
 CLF_MODEL_PATH = "reports/loso/models_phase2b_cohort_study/clf_best"
-NER_MODEL_PATH = "reports/loso/models_phase2b_cohort_study/ner_best"
-BACKBONE       = "Phase6-LOSO (cohort_study fold)"
+NER_MODEL_PATH = "reports/loso/models_phase7_cohort_study/ner_best"
+BACKBONE       = "Phase7-Hybrid (cohort_study fold)"
 DESCRIPTION    = (
-    "PubMedBERT fine-tuned on Ghana ADR gold+aug data (CLF) and "
-    "gold+aug+DailyMed silver (NER); Phase 6 best: macro CLF=0.713, NER=0.651; "
-    "cohort_study fold: CLF=0.776, NER=0.754, threshold=0.55"
+    "PubMedBERT DAPT fine-tuned on Ghana ADR data; Phase 7 Hybrid: "
+    "Phase 6 CLF + Phase 7 NER; macro LOSO CLF=0.724, NER=0.655; "
+    "cohort_study fold: CLF=0.776, NER=0.785, threshold=0.55"
 )
 
 # Phase 6 cohort_study threshold (val sweep selected t=0.55)
