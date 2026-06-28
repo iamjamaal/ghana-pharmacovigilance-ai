@@ -172,7 +172,7 @@ tailwind.config = {
       {% else %}
       <span class="px-sm py-xs text-[10px] font-semibold border border-yellow-300 bg-yellow-50 text-yellow-800 rounded">&#9888; Demo Mode</span>
       {% endif %}
-      <span class="px-sm py-xs text-[10px] font-semibold border border-outline-variant text-on-surface-variant rounded">16 Ghanaian Sources</span>
+      <span class="px-sm py-xs text-[10px] font-semibold border border-outline-variant text-on-surface-variant rounded">4 Source Domains</span>
       <span class="px-sm py-xs text-[10px] font-semibold bg-primary text-on-primary rounded">Beta v0.9</span>
     </div>
   </div>
@@ -181,7 +181,7 @@ tailwind.config = {
   <nav class="hidden md:flex items-center gap-lg" aria-label="Main navigation">
     <button id="tnav-dashboard" class="tnav-active text-label-caps font-label-caps h-14 border-b-2 transition-colors" onclick="showContent('single')">Dashboard</button>
     <button id="tnav-alerts" class="tnav-inactive text-label-caps font-label-caps h-14 border-b-2 relative transition-colors" onclick="showContent('alerts')">
-      Alerts<span class="absolute -top-0.5 -right-3 bg-secondary text-on-secondary text-[8px] font-bold px-[5px] py-px rounded-full">3</span>
+      Alerts<span id="alerts-badge" class="absolute -top-0.5 -right-3 bg-secondary text-on-secondary text-[8px] font-bold px-[5px] py-px rounded-full">3</span>
     </button>
     <button id="tnav-protocols" class="tnav-inactive text-label-caps font-label-caps h-14 border-b-2 transition-colors" onclick="showContent('protocols')">Protocols</button>
     <button id="tnav-archive" class="tnav-inactive text-label-caps font-label-caps h-14 border-b-2 transition-colors" onclick="showContent('archive')">Archive</button>
@@ -234,6 +234,12 @@ tailwind.config = {
       </button>
       <button onclick="loadExample('zidovudine')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
         <span class="font-semibold text-primary">Zidovudine</span><span class="text-on-surface-variant"> → Anaemia</span>
+      </button>
+      <button onclick="loadExample('dechallenge')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
+        <span class="font-semibold text-primary">Dechallenge</span><span class="text-on-surface-variant"> → Rule override</span>
+      </button>
+      <button onclick="loadExample('negation')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
+        <span class="font-semibold text-primary">Negation guard</span><span class="text-on-surface-variant"> → Non-ADR</span>
       </button>
       <button onclick="loadExample('negative')" class="w-full text-left px-sm py-xs text-body-sm bg-surface border border-outline-variant rounded hover:border-primary hover:bg-surface-container transition-colors">
         <span class="text-on-surface-variant">Non-ADR control</span>
@@ -329,6 +335,12 @@ tailwind.config = {
             <span class="flex items-center gap-xs text-body-sm text-on-surface-variant"><span class="entity-adr px-xs rounded text-[11px]">! ADR</span></span>
             <span class="flex items-center gap-xs text-body-sm text-on-surface-variant"><span class="entity-severity px-xs rounded text-[11px]">&#9733; Severity</span></span>
             <span class="flex items-center gap-xs text-body-sm text-on-surface-variant"><span class="entity-patient px-xs rounded text-[11px]">P Patient</span></span>
+          </div>
+
+          <!-- DRUG→ADR relations (populated by JS, hidden until results arrive) -->
+          <div id="relations-section" class="hidden mt-md pt-md border-t border-outline-variant">
+            <p class="text-label-caps font-label-caps text-on-surface-variant mb-sm">DRUG&#8202;&#8594;&#8202;ADR RELATIONS</p>
+            <div id="relations-list" class="space-y-xs"></div>
           </div>
         </div>
       </section>
@@ -804,7 +816,7 @@ tailwind.config = {
   <div class="mb-lg pb-lg border-b border-outline-variant flex flex-wrap items-end justify-between gap-md">
     <div>
       <h2 class="text-headline-md font-semibold text-on-background">Analysis Archive</h2>
-      <p class="text-body-sm text-on-surface-variant mt-xs">Past single-analysis runs — demo data</p>
+      <p class="text-body-sm text-on-surface-variant mt-xs">Past single-analysis runs — updated live as you analyse</p>
     </div>
     <input type="text" id="archive-search" oninput="filterArchive()" placeholder="Search drug, ADR, text…"
       class="px-md py-sm border border-outline-variant rounded text-body-sm bg-surface focus:outline-none focus:ring-2 focus:ring-primary w-64"/>
@@ -894,6 +906,8 @@ const EXAMPLES = {
   coartem:     "Patient is a 45-year-old male presenting at Korle Bu Teaching Hospital. After being prescribed Coartem for uncomplicated malaria, he experienced an acute Oculogyric crisis within 2 hours. Symptoms were severe, requiring immediate intervention.",
   amoxicillin: "A 28-year-old female developed a severe rash and urticaria after taking Amoxicillin for a throat infection. The rash spread across the trunk and was accompanied by mild fever and pruritus.",
   zidovudine:  "The patient on zidovudine therapy presented with severe anaemia requiring blood transfusion. Haemoglobin dropped to 6.2 g/dL within 8 weeks of initiating treatment.",
+  dechallenge: "After stopping cotrimoxazole, the maculopapular rash that had spread across the patient's trunk resolved completely within 5 days. No further skin reactions occurred.",
+  negation:    "She denied any adverse effects during her entire course of Fansidar treatment. The patient stated she felt well throughout and completed the full regimen without complaint.",
   negative:    "The patient was discharged in stable condition after completing the prescribed course of antimalarials. No adverse effects were observed during the treatment period."
 };
 
@@ -976,6 +990,7 @@ function loadExample(key) {
   updateCharCount();
   document.getElementById('results-section').classList.add('hidden');
   showContent('single');
+  runAnalysis();
 }
 
 function clearAnalysis() {
@@ -1039,27 +1054,44 @@ async function runAnalysis() {
 
 function renderResults(res, text) {
   const isAdr = res.is_adr;
-  const confPct = (res.confidence * 100).toFixed(1) + '%';
-  const noAdrPct = ((1 - res.confidence) * 100).toFixed(1) + '%';
+  const confPct   = (res.confidence * 100).toFixed(1) + '%';
+  const noAdrPct  = ((1 - res.confidence) * 100).toFixed(1) + '%';
 
+  // ── Banner (uncertain gets its own amber state) ───────────────────────────
   const banner = document.getElementById('result-banner');
-  if (isAdr) {
+  if (res.uncertain) {
+    banner.className = 'px-lg py-md flex items-center justify-between text-white';
+    banner.style.backgroundColor = '#d97706';
+    document.getElementById('result-icon').textContent = 'help';
+    document.getElementById('result-label').textContent = 'Inconclusive — Manual Review Required';
+    document.getElementById('result-sub').textContent   = res.explanation || 'Model confidence in uncertain range (45–55%). Clinical judgement required.';
+    document.getElementById('severity-badge').textContent = 'Uncertain';
+  } else if (isAdr) {
     banner.className = 'bg-secondary px-lg py-md flex items-center justify-between text-on-secondary';
+    banner.style.backgroundColor = '';
     document.getElementById('result-icon').textContent = 'warning';
+    document.getElementById('result-label').textContent = 'ADR Detected';
+    document.getElementById('result-sub').textContent   = res.explanation || '';
+    document.getElementById('severity-badge').textContent = 'High Severity';
   } else {
     banner.className = 'bg-primary px-lg py-md flex items-center justify-between text-on-primary';
+    banner.style.backgroundColor = '';
     document.getElementById('result-icon').textContent = 'check_circle';
+    document.getElementById('result-label').textContent = 'No ADR Detected';
+    document.getElementById('result-sub').textContent   = res.explanation || '';
+    document.getElementById('severity-badge').textContent = 'Normal';
   }
-  document.getElementById('result-label').textContent = isAdr ? 'ADR Detected' : 'No ADR Detected';
-  document.getElementById('result-sub').textContent   = res.explanation || '';
-  document.getElementById('severity-badge').textContent = isAdr ? 'High Severity' : 'Normal';
 
+  // ── Flag pills ────────────────────────────────────────────────────────────
   const flagPillsEl = document.getElementById('flag-pills');
   flagPillsEl.innerHTML = '';
-  if (res.uncertain)         flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-yellow-100 text-yellow-800 text-[10px] font-semibold rounded">Uncertain</span>';
-  if (res.rule_triggered)    flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-blue-100 text-blue-800 text-[10px] font-semibold rounded">Rule Override</span>';
-  if (res.negation_override) flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-purple-100 text-purple-800 text-[10px] font-semibold rounded">Negation</span>';
+  if (res.uncertain)         flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-yellow-100 text-yellow-800 text-[10px] font-semibold rounded">&#63; Uncertain</span>';
+  if (res.rule_triggered)    flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-blue-100 text-blue-800 text-[10px] font-semibold rounded">&#9889; Rule Override</span>';
+  if (res.negation_override) flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-purple-100 text-purple-800 text-[10px] font-semibold rounded">&#8635; Negation Guard</span>';
+  if (!res.uncertain && !res.rule_triggered && !res.negation_override)
+    flagPillsEl.innerHTML += '<span class="px-sm py-xs bg-surface-container text-on-surface-variant text-[10px] font-semibold rounded">&#129302; Model Decision</span>';
 
+  // ── Confidence bars ───────────────────────────────────────────────────────
   document.getElementById('conf-adr').textContent    = isAdr ? confPct : noAdrPct;
   document.getElementById('conf-no-adr').textContent = isAdr ? noAdrPct : confPct;
   setTimeout(() => {
@@ -1069,21 +1101,68 @@ function renderResults(res, text) {
     document.getElementById('bar-no-adr').style.transform = `scaleX(${noAdrScale.toFixed(3)})`;
   }, 50);
 
+  // ── Annotated text ────────────────────────────────────────────────────────
   document.getElementById('annotated-text').innerHTML = buildAnnotatedHtml(text, res.entities);
 
+  // ── Entity table (with MedDRA secondary line) ─────────────────────────────
   const tbody = document.getElementById('entity-table-body');
   if (res.entities && res.entities.length) {
     tbody.innerHTML = res.entities.map(e => {
-      const cls  = LABEL_CLASS[e.label] || '';
-      const conf = e.confidence != null ? e.confidence.toFixed(3) : '—';
+      const cls      = LABEL_CLASS[e.label] || '';
+      const conf     = e.confidence != null ? e.confidence.toFixed(3) : '—';
+      const meddra   = e.meddra_pt ? `<span class="block text-[10px] text-on-surface-variant mt-0.5 font-mono">${escapeHtml(e.meddra_pt)}</span>` : '';
       return `<tr class="hover:bg-surface-container-low">
-        <td class="px-md py-sm"><span class="${cls}">${escapeHtml(e.text)}</span></td>
+        <td class="px-md py-sm"><span class="${cls}">${escapeHtml(e.text)}</span>${meddra}</td>
         <td class="px-md py-sm text-[10px] font-label-caps text-on-surface-variant">${e.label}</td>
         <td class="px-md py-sm text-right font-mono text-body-sm">${conf}</td>
       </tr>`;
     }).join('');
   } else {
     tbody.innerHTML = '<tr><td colspan="3" class="px-md py-sm text-on-surface-variant text-center text-body-sm">No entities detected</td></tr>';
+  }
+
+  // ── DRUG→ADR relations ────────────────────────────────────────────────────
+  const relSection = document.getElementById('relations-section');
+  if (res.relations && res.relations.length) {
+    document.getElementById('relations-list').innerHTML = res.relations.map(r =>
+      `<div class="flex items-center gap-sm flex-wrap py-xs">
+        <span class="entity-drug px-sm rounded text-body-sm">${escapeHtml(r.drug)}</span>
+        <span class="material-symbols-outlined text-on-surface-variant text-[18px]">arrow_forward</span>
+        <span class="entity-adr px-sm rounded text-body-sm">${escapeHtml(r.adr)}</span>
+        <span class="ml-auto px-sm py-xs bg-surface-container text-on-surface-variant text-[10px] font-semibold rounded-full">${escapeHtml(r.type || 'CAUSES')}</span>
+      </div>`
+    ).join('');
+    relSection.classList.remove('hidden');
+  } else {
+    relSection.classList.add('hidden');
+  }
+
+  // ── Push to live archive ──────────────────────────────────────────────────
+  const today = new Date().toISOString().slice(0, 10);
+  const firstDrug = (res.entities || []).find(e => e.label === 'DRUG');
+  ARCHIVE_DATA.unshift({
+    date: today,
+    text: text.length > 80 ? text.slice(0, 80) + '…' : text,
+    cls:  isAdr ? 'ADR' : 'Non-ADR',
+    conf: res.confidence,
+    drug: firstDrug ? firstDrug.text : '—'
+  });
+
+  // ── Auto-generate alert for high-confidence ADR ───────────────────────────
+  if (isAdr && res.confidence >= 0.85) {
+    const firstAdr  = (res.entities || []).find(e => e.label === 'ADR');
+    const alertDrug = firstDrug ? firstDrug.text : 'Unknown drug';
+    const alertAdr  = firstAdr  ? firstAdr.text  : 'Unspecified ADR';
+    ALERTS_DATA.unshift({
+      id:     'ADR-' + today.replace(/-/g, '') + '-' + String(ALERTS_DATA.length + 1).padStart(4, '0'),
+      date:   today,
+      drug:   alertDrug,
+      adr:    alertAdr,
+      conf:   res.confidence,
+      status: 'flagged'
+    });
+    updateAlertsBadge();
+    showToast('High-confidence ADR flagged and added to Alerts.', 'warning');
   }
 
   document.getElementById('results-section').classList.remove('hidden');
@@ -1364,8 +1443,21 @@ function filterArchive() {
   renderArchiveTable(filtered);
 }
 
+// ── Alerts badge ──────────────────────────────────────────────────────────────
+function updateAlertsBadge() {
+  const flagged = ALERTS_DATA.filter(r => r.status === 'flagged').length;
+  const badge = document.getElementById('alerts-badge');
+  if (badge) badge.textContent = flagged;
+}
+
 // ── Modal ─────────────────────────────────────────────────────────────────────
 function openModal() {
+  if (lastResult && lastResult.entities) {
+    const drug = (lastResult.entities.find(e => e.label === 'DRUG') || {}).text || '';
+    const adr  = (lastResult.entities.find(e => e.label === 'ADR')  || {}).text || '';
+    document.getElementById('modal-drug').value = drug;
+    document.getElementById('modal-adr').value  = adr;
+  }
   document.getElementById('report-modal').classList.remove('hidden');
 }
 function closeModal() {
@@ -1378,6 +1470,10 @@ function submitReport(e) {
 }
 document.addEventListener('click', e => {
   if (e.target.id === 'report-modal') closeModal();
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runAnalysis(); }
+  if (e.key === 'Escape') closeModal();
 });
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
