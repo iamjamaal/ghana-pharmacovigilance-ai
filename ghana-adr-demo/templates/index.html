@@ -654,25 +654,25 @@ tailwind.config = {
     </button>
   </div>
 
-  <!-- Inline summary strip — no identical card grid -->
+  <!-- Inline summary strip — driven by ALERTS_DATA -->
   <div class="flex flex-wrap items-center gap-xl py-md mb-lg border-y border-outline-variant">
     <div class="flex items-baseline gap-sm">
-      <span class="text-display-lg font-bold text-on-background">8</span>
+      <span id="alerts-total" class="text-display-lg font-bold text-on-background">8</span>
       <span class="text-body-sm text-on-surface-variant">total</span>
     </div>
     <div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
     <div class="flex items-baseline gap-sm">
-      <span class="text-display-lg font-bold text-secondary">3</span>
+      <span id="alerts-flagged" class="text-display-lg font-bold text-secondary">3</span>
       <span class="text-body-sm text-on-surface-variant">flagged</span>
     </div>
     <div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
     <div class="flex items-baseline gap-sm">
-      <span class="text-display-lg font-bold" style="color:#92400e">3</span>
+      <span id="alerts-pending" class="text-display-lg font-bold" style="color:#92400e">3</span>
       <span class="text-body-sm text-on-surface-variant">pending review</span>
     </div>
     <div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
     <div class="flex items-baseline gap-sm">
-      <span class="text-display-lg font-bold" style="color:#166534">2</span>
+      <span id="alerts-reviewed" class="text-display-lg font-bold" style="color:#166534">2</span>
       <span class="text-body-sm text-on-surface-variant">reviewed</span>
     </div>
   </div>
@@ -772,16 +772,6 @@ tailwind.config = {
     <div class="space-y-lg">
 
       <div class="bg-surface border border-outline-variant rounded-xl p-lg">
-        <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">GHANA FDA CONTACT</h3>
-        <div class="space-y-sm text-body-sm">
-          <div class="flex gap-sm items-start"><span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">location_on</span><span class="text-on-surface-variant">Ghana Food and Drugs Authority<br/>P.O. Box CT 2783, Cantonments, Accra</span></div>
-          <div class="flex gap-sm items-center"><span class="material-symbols-outlined text-primary text-[18px]">phone</span><span class="text-on-surface-variant">+233 302 233 200</span></div>
-          <div class="flex gap-sm items-center"><span class="material-symbols-outlined text-primary text-[18px]">email</span><span class="text-on-surface-variant">pv@fdaghana.gov.gh</span></div>
-          <div class="flex gap-sm items-center"><span class="material-symbols-outlined text-primary text-[18px]">language</span><span class="text-on-surface-variant">www.fdaghana.gov.gh</span></div>
-        </div>
-      </div>
-
-      <div class="bg-surface border border-outline-variant rounded-xl p-lg">
         <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">REPORTING TIMELINES</h3>
         <div class="divide-y divide-outline-variant text-body-sm">
           <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Serious / Unexpected</span><span class="font-semibold text-secondary">7 days</span></div>
@@ -789,16 +779,6 @@ tailwind.config = {
           <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Periodic Safety Update</span><span class="font-semibold">6 months</span></div>
           <div class="flex justify-between py-sm"><span class="text-on-surface-variant">Annual Safety Report</span><span class="font-semibold">12 months</span></div>
         </div>
-      </div>
-
-      <div class="bg-surface border border-outline-variant rounded-xl p-lg">
-        <h3 class="text-label-caps font-label-caps text-on-surface-variant mb-md">REFERENCES</h3>
-        <ul class="space-y-xs text-body-sm text-on-surface-variant">
-          <li>WHO-UMC Causality Assessment System</li>
-          <li>Ghana FDA Good Pharmacovigilance Practice Guidelines (2021)</li>
-          <li>ICH E2A Clinical Safety Data Management</li>
-          <li>CIOMS Practical Aspects of Signal Detection</li>
-        </ul>
       </div>
 
       <button onclick="openModal()" class="w-full py-sm bg-secondary text-on-secondary font-semibold rounded flex items-center justify-center gap-xs text-body-sm hover:bg-secondary-container transition-colors">
@@ -1204,6 +1184,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderDatasetsTable();
   renderAlertsTable();
   renderArchiveTable(ARCHIVE_DATA);
+  updateAlertsBadge();
 });
 
 async function handleFile(file) {
@@ -1443,11 +1424,18 @@ function filterArchive() {
   renderArchiveTable(filtered);
 }
 
-// ── Alerts badge ──────────────────────────────────────────────────────────────
+// ── Alerts badge + summary strip ─────────────────────────────────────────────
 function updateAlertsBadge() {
-  const flagged = ALERTS_DATA.filter(r => r.status === 'flagged').length;
-  const badge = document.getElementById('alerts-badge');
-  if (badge) badge.textContent = flagged;
+  const flagged  = ALERTS_DATA.filter(r => r.status === 'flagged').length;
+  const pending  = ALERTS_DATA.filter(r => r.status === 'pending').length;
+  const reviewed = ALERTS_DATA.filter(r => r.status === 'reviewed').length;
+  const total    = ALERTS_DATA.length;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('alerts-badge',   flagged);
+  set('alerts-total',   total);
+  set('alerts-flagged', flagged);
+  set('alerts-pending', pending);
+  set('alerts-reviewed',reviewed);
 }
 
 // ── Modal ─────────────────────────────────────────────────────────────────────
