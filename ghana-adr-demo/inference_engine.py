@@ -318,6 +318,30 @@ _POSITIVE_DECHALLENGE = re.compile(
     re.IGNORECASE | re.DOTALL
 )
 
+# Fix 1.1b: reversed-order positive dechallenge — symptom resolution described BEFORE drug cessation.
+# e.g. "The numbness disappeared entirely within three weeks of stopping isoniazid."
+_POSITIVE_DECHALLENGE_REV = re.compile(
+    r'\b(?:disappeared|resolved|cleared|improved|subsided|abated|remitted|settled|gone)\b'
+    r'.{0,120}'
+    r'\b(?:stopping|discontinuing|ceasing|cessation\s+of|withdrawal\s+of|'
+    r'discontinuation\s+of|on\s+stopping|after\s+stopping|since\s+stopping|'
+    r'following\s+(?:stopping|discontinuation|cessation))\b',
+    re.IGNORECASE | re.DOTALL
+)
+
+# Fix 1.1c: soft dechallenge coexistence guard — both resolution and cessation language are
+# present but neither directional pattern matched; elevate to uncertain rather than leaving
+# it entirely to the classifier.
+_SOFT_DECHALLENGE_RESOLUTION = re.compile(
+    r'\b(?:disappeared|resolved|cleared|improved|subsided|abated|remitted|settled)\b',
+    re.IGNORECASE
+)
+_SOFT_DECHALLENGE_CESSATION = re.compile(
+    r'\b(?:stopped|discontinued|ceased|stopping|discontinuing|ceasing|'
+    r'withdrawal|cessation|discontinuation)\b',
+    re.IGNORECASE
+)
+
 
 def has_resolution_language(text: str) -> bool:
     """Return True if the text describes a resolved or successful outcome with no ADR onset."""
@@ -1128,6 +1152,23 @@ def analyse_text(text, cls_tok, cls_mod, ner_tok, ner_mod, device):
                 "rule_triggered": True, "negation_override": False,
                 "entities": ents, "relations": rels, "highlighted_html": html}
 
+    # Fix 1.1b: reversed-order positive dechallenge — "symptom disappeared … after stopping drug".
+    # Same semantics as Fix 1.1; must also fire before the resolution suppressor.
+    if _POSITIVE_DECHALLENGE_REV.search(text):
+        ents = extract_entities(text, ner_tok, ner_mod, device)
+        ents = filter_adr_entities(ents)
+        ents = merge_hyphenated_drugs(text, ents)
+        ents = apply_severity_rules(text, ents)
+        ents = apply_ghanaian_synonyms(text, ents)
+        ents = apply_adr_gazetteer(text, ents)
+        ents = normalise_entities(ents)
+        rels = extract_relations(ents, text)
+        html = highlight_text(text, ents)
+        return {"text": text, "contains_adr": True, "confidence": 1.0,
+                "prob_no_adr": 0.0, "prob_adr": 1.0, "uncertain": False,
+                "rule_triggered": True, "negation_override": False,
+                "entities": ents, "relations": rels, "highlighted_html": html}
+
     # Fix A: resolution / treatment-success language — runs before classifier
     if has_resolution_language(text):
         ents = extract_entities(text, ner_tok, ner_mod, device)
@@ -1207,6 +1248,14 @@ def analyse_text(text, cls_tok, cls_mod, ner_tok, ner_mod, device):
     ents = normalise_entities(ents)
     rels = extract_relations(ents, text)                   # FIX 5
     html = highlight_text(text, ents)
+
+    # Fix 1.1c: soft dechallenge uncertain guard — if both resolution and cessation language
+    # co-occur but neither directional dechallenge pattern fired, the classifier alone is
+    # unreliable; force uncertain so the reviewer sees the amber banner.
+    if (_SOFT_DECHALLENGE_RESOLUTION.search(text)
+            and _SOFT_DECHALLENGE_CESSATION.search(text)):
+        cls = {**cls, "uncertain": True}
+
     return {"text": text, **cls, "negation_override": False,
             "entities": ents, "relations": rels, "highlighted_html": html}
 
